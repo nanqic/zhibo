@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+</head>
+
+<body>
+  <div class="container">
+
+      <h5 class="text-danger text-center">最大2M，支持pdf、doc及docx格式</h5>
+      <form action="">
+          <div class="input-group row">
+              <input type="file" class="form-control col-4" id="file" accept=".pdf ,.doc,.docx">
+              <button type="button" class="btn btn-success col-2" onclick="save()">上传</button>
+          </div>
+      </form>
+
+  </div>
+      <script src="js/axios.min.js"></script>
+      <script src="bootstrap/js/bootstrap.bundle.js"></script>
+      <script src="js/docCookies.js"></script>
+    <script>
+        function save(){
+            let file = document.querySelector('#file')
+            if (file.files.length === 0) {
+                alert("未选择文件");
+                return;
+            }
+            if (file.files[0].size > 2048000) {
+                alert("文件大小超过限制");
+                return;
+            }
+            // 读取cookie信息
+            let userInfo = docCookies.getItem('user')
+            let uid = JSON.parse(userInfo).uid
+            let formData = new FormData()
+            formData.append("file", file.files[0]);
+            formData.append("uid", uid)
+            axios({
+                method: 'post',
+                url: '/file/upload',
+                data: formData,
+            }).then(()=>{
+                let disser = window.parent.document.querySelector('.disser-list')
+                disser.click()
+            })
+            alert("上传成功！")
+            // 跳转到列表页
+
+
+        }
+    </script>
+</body>
+
+</html>

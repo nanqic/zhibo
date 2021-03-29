@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+</head>
+
+<body>
+<div class="container">
+    <form action="updatePasswd" method="post">
+        <div class="mb-3">
+            <label for="cur-password" class="form-label">原密码</label>
+            <input type="password" class="form-control" id="cur-password">
+        </div>
+        <div class="mb-3">
+            <label for="new-password" class="form-label">新密码</label>
+            <input type="password" class="form-control" id="new-password">
+        </div>
+        <div class="mb-3">
+            <label for="password2" class="form-label">确认密码</label>
+            <input type="password" class="form-control" id="password2">
+        </div>
+        <button type="button" onclick="update()" class="btn btn-primary">  确认修改</button>
+    </form>
+</div>
+<script src="js/axios.min.js"></script>
+<script>
+
+   function update(){
+       // 从cookie获取用户账号
+       let account = JSON.parse(docCookies.getItem('user')).account
+       let curPassword = document.querySelector('#cur-password').value
+       let newPassword = document.querySelector('#new-password').value
+       axios.post("/user/newPassword",
+           {
+               account: account,
+               curPassword: curPassword,
+               newPassword: newPassword
+           }
+       ).then(resp=>{
+           if (resp.data.status==200){
+               alert("修改成功，请重新登录！")
+               axios.get("/user/logout")
+               docCookies.removeItem('user')
+               // 刷新父页面
+               window.parent.location.reload()
+           }
+       })
+   }
+</script>
+<script src="bootstrap/js/bootstrap.bundle.js"></script>
+<script src="js/docCookies.js"></script>
+
+</body>
+
+</html>

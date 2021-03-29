@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题目列表</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+</head>
+
+<body>
+    <div class="container">
+<!--        搜索题目-->
+        <div class="row">
+            <i class="bi bi-search"></i>
+            <div class="col-4 d-inline-block">
+                <input type="text" class="form-control">
+            </div>
+            <button class="btn btn-success col-2">搜索题目</button>
+        </div>
+        <!--    题目列表-->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">课题Id</th>
+                    <th scope="col">课题名字</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+            </tbody>
+        </table>
+        <nav aria-label="page navigation">
+            <ul class="pagination justify-content-center fixed-bottom" id="page-list">
+                <li class="page-item disabled" id="prev-page">
+                    <a class="page-link" >
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li id="next-page" class="page-item">
+                    <a class="page-link">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+            <span id="totalPage"></span>
+        </nav>
+    </div>
+    <script src="bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="js/docCookies.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/myDisser.js">
+
+    </script>
+</body>
+
+</html>

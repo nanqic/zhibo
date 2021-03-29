@@ -1,0 +1,29 @@
+web:
+  upload-path: /Users/nanqic/Codespace/zhibo/src/main/resources/upload/
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_zhibo
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: classpath:upload/,classpath:static/,classpath:html/
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      # 配置统一表前缀
+      table-prefix: tb_
+server:
+  port: 80
+

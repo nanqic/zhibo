@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
+</head>
+
+<body>
+<div class="container">
+    <form>
+        <fieldset disabled>
+            <div class="mb-3">
+                <label for="name" class="form-label">姓名：</label>
+                <input type="text" id="name" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="dept" class="form-label">院系：</label>
+                <input type="text" id="dept" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="major" class="form-label">专业：</label>
+                <input type="text" id="major" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">手机：</label>
+                <input type="text" id="phone" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="class-name" class="form-label">班级：</label>
+                <input type="text" id="class-name" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="counselor" class="form-label">指导老师：</label>
+                <input type="text" id="counselor" class="form-control">
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+<script src="bootstrap/js/bootstrap.bundle.js"></script>
+<script src="js/docCookies.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+    // 读取cookie信息
+    let userInfo = docCookies.getItem('user')
+    if (userInfo != null) {
+        let uid = JSON.parse(userInfo).uid
+        init(uid)
+    }
+
+    function init(uid) {
+        const name = document.querySelector('#name')
+        const dept = document.querySelector('#dept')
+        const major = document.querySelector('#major')
+        const phone = document.querySelector('#phone')
+        const className = document.querySelector('#class-name')
+        const counselor = document.querySelector('#counselor')
+        if (uid > 40) {
+            className.previousElementSibling.innerHTML = '职称'
+            counselor.previousElementSibling.innerHTML = '指导学生'
+        }
+        axios.get("/user/info/" + uid)
+            .then(resp => {
+                let data = resp.data.data
+                name.value = data.userInfo.name
+                dept.value = data.userInfo.dept
+                major.value = data.userInfo.major
+                phone.value = data.userInfo.phone
+                className.value = data.userInfo.zhicheng
+                counselor.value = data.counselor
+            })
+    }
+</script>
+
+
+</body>
+
+</html>

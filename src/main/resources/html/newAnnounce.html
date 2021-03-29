@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新通告</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+</head>
+<body>
+<div class="container">
+    <form>
+        <div class="mb-3">
+            <label for="title" class="form-label">标题</label>
+            <input type="text" required class="form-control" id="title">
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">内容</label>
+            <input type="text" required class="form-control" id="content">
+        </div>
+        <button type="button" onclick="newAnno()" class="btn btn-primary"> 发布通知</button>
+    </form>
+
+</div>
+<script src="js/axios.min.js"></script>
+<script>
+    function newAnno(){
+        let title = document.getElementById('title')
+        let content = document.getElementById('content')
+        axios.post("/anno/new",{
+            title:title.value,
+            content:content.value
+        })
+        .then(resp=>{
+            if (resp.data.status==200){
+                alert("发布成功！")
+                title.value = ''
+                content.value=''
+            }
+        })
+    }
+</script>
+<script src="bootstrap/js/bootstrap.bundle.js"></script>
+<script src="js/docCookies.js"></script>
+
+</body>
+</html>

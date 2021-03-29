@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+</head>
+
+<body>
+  <div class="container">
+      <h5 class="text-center text-warning">资料列表</h5>
+      <table class="table">
+          <thead>
+          <tr>
+              <th scope="col">序号</th>
+              <th scope="col">资料名字</th>
+              <th scope="col">上传人</th>
+          </tr>
+          </thead>
+          <tbody class="tbody">
+
+          </tbody>
+      </table>
+    </div>
+          <script src="js/axios.min.js"></script>
+          <script src="bootstrap/js/bootstrap.bundle.js"></script>
+          <script src="js/docCookies.js"></script>
+        <script>
+            // create(1,2,3)
+            function create(id,path,up){
+                const tbody = document.querySelector('.tbody')
+                let tr = document.createElement('tr')
+                let td = document.createElement('td')
+                let a = document.createElement('a')
+                for (let j=1;j<=4;j++){
+                    tr.appendChild(td.cloneNode(true))
+                }
+                tr.children[0].innerHTML = id
+                tr.children[1].appendChild(a)
+                tr.children[2].innerHTML = up
+                tr.children[1].className = 'text-info'
+                a.href = 'http://localhost/'+path
+                a.innerHTML = path
+                tbody.appendChild(tr)
+            }
+            let i = 1
+            axios('/file/list/'+i)
+            .then( resp =>{
+                let data = resp.data.data
+                data.records.forEach(col => {
+                    create(col.id,col.path,col.uploader)
+                })
+                }
+            )
+        </script>
+
+</body>
+
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录注册</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
+</head>
+<body>
+<div id="login-reg" class="container bg-light p-5 d-flex flex-column align-items-center w-25">
+    <h4 class="text-primary m-5">登录注册页</h4>
+    <h5 class="m-5"></h5>
+    <div class="d-flex m-5">
+        <div class="">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                登录
+            </button>
+            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="loginModalLabel">登录系统</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="needs-validation" novalidate action="/login" method="post">
+                                <div class="mb-3">
+                                    <label for="login-account" class="col-form-label">账号：</label>
+                                    <input type="text" class="form-control" id="login-account"
+                                           autocomplete="username" name="username" required/>
+                                    <div class="invalid-feedback">
+                                        请输入你的学号或教职工号
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="login-password" class="col-form-label">密码：</label>
+                                    <input type="password" class="form-control" autocomplete="current-password"
+                                           id="login-password"
+                                           name="password"
+                                           required/>
+                                    <div class="invalid-feedback">
+                                        请输入你的密码
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <p id="login-info" style="margin-right: 5rem; color: #ff0000;"></p>
+                                    <button type="button" id="login-close" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                        关闭
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="doLogin()">登录</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="reg" class="ms-5">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registerModal">
+                注册
+            </button>
+            <div class="modal fade" id="registerModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="registerModalLabel">注册系统</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-reg" class="was-validated needs-validation" novalidate method="post" action="/register">
+                                <div class="mb-3">
+                                    <label for="reg-name" class="col-form-label">姓名：</label>
+                                    <input type="text" class="form-control" id="reg-name" required
+                                           pattern="[\u4e00-\u9fa5]{1,4}"/>
+                                    <div class="invalid-feedback">
+                                        请输入你的真实姓名
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="reg-account" class="col-form-label">账号：</label>
+                                    <input type="text" class="form-control" id="reg-account" autocomplete="username"
+                                           required
+                                           pattern="[0-9]{8,12}"/>
+                                    <div class="invalid-feedback">
+                                        输入你的学号或教职工号
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="reg-password" class="col-form-label">密码：</label>
+                                    <input type="password" class="form-control" id="reg-password"
+                                           autocomplete="current-password"
+                                           required pattern="[0-9A-Za-z]{8,20}"/>
+                                    <div class="invalid-feedback">
+                                        可以是数字或字母，8-20位
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <p id="reg-info" style="margin-right: 5rem; color: red;"></p>
+                                    <button type="button" id="reg-close" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                        关闭
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="doRegister()">注册</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="bootstrap/js/bootstrap.bundle.js" type="text/javascript"></script>
+<script src="js/axios.min.js" type="text/javascript"></script>
+<script src="js/loginReg.js" type="text/javascript"></script>
+</html>

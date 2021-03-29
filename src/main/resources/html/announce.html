@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announce</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
+</head>
+
+<body>
+<div class="container">
+    <h5 class="text-info">
+        最新通告
+    </h5>
+    <div class="card-group">
+        <!-- 动态创建card -->
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center fixed-bottom" id="page-list">
+            <li class="page-item disabled" id="prev-page">
+                <a class="page-link">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li id="next-page" class="page-item">
+                <a class="page-link">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+        <span id="totalPage"></span>
+    </nav>
+</div>
+
+</body>
+<script src="js/axios.min.js" type="text/javascript"></script>
+<script src="bootstrap/js/bootstrap.bundle.js" type="text/javascript"></script>
+<script src="js/docCookies.js" type="text/javascript"></script>
+<script src="js/announce.js" type="text/javascript"></script>
+
+</html>
