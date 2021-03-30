@@ -27,7 +27,7 @@ public class UserServiceImpl implements IUserService {
     private PasswordEncoder passwordEncoder;
     @Override
     public RespVO register(UserRegisterVO vo) {
-        UserRegisterVO matchedVO = userMapper.getUserRegisterVO(vo.getUsername());
+        UserRegisterVO matchedVO = userMapper.getUserRegister(vo.getUsername());
         // 注册信息非空判断
         if (vo.getName().isEmpty() || vo.getPassword().isEmpty() || vo.getUsername().isEmpty()) {
             return RespVO.error("数据非法");
@@ -72,16 +72,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public RespVO userList(int index, int size) {
-        Page<UserListVO> page = new Page<>(index, size);
-        IPage<UserListVO> resPage = userMapper.selectUserList(page);
-
-        return RespVO.ok("ok",resPage);
-    }
-
-    @Override
     public RespVO getLoginResults(String username) {
-        LoginResultsVO vo = userMapper.getLoginResultsVO(username);
+        LoginResultsVO vo = userMapper.getLoginResults(username);
         return RespVO.ok("ok",vo);
     }
 

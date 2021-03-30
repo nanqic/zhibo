@@ -12,7 +12,6 @@ function crumbNav() {
     const crumbSubMenus = document.querySelectorAll('.nav-sub-menu')
     const menu = document.querySelector('#nav-menu')
     const subMenu = document.querySelector('#nav-sub-menu')
-
     crumbSubMenus.forEach((s) => {
         s.addEventListener('click', (e) => {
             menu.innerHTML = s.parentNode.previousElementSibling.innerText
@@ -50,6 +49,15 @@ function init() {
                 graduation.innerHTML = data.graduation
                 major.innerHTML = data.major+"  "+data.className
             })
+        const userRole = docCookies.getItem("userRole")
+        if (userRole=='教师'){
+            let teacherCenter = document.querySelector('#teacher-center')
+            teacherCenter.className='nav-menu'
+        }
+        if (userRole=='管理员'){
+            let adminCenter = document.querySelector('#admin-center')
+            adminCenter.className='nav-menu'
+        }
 
         // 创建梳子导航
         crumbNav()

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +21,16 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserLoginVO vo = userMapper.getUserLoginVO(username);
-        String role = vo.getRoleName();
+        UserLoginVO vo = userMapper.getUserLogin(username);
+
         // 如果查询不到用户，提示不存在
-        if(ObjectUtils.isEmpty(vo)) throw new UsernameNotFoundException("账号错误或用户不存在");
+        if (ObjectUtils.isEmpty(vo)) throw new UsernameNotFoundException("账号错误或用户不存在");
         // 根据查到的角色，创建相应的角色
+        String role = vo.getRoleName();
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role));
-        UserDetails userDetails = new User(username,vo.getPassword(),
+        // 这里传入数据库查到的密码，security框架会自动校验
+        UserDetails userDetails = new User(username, vo.getPassword(),
                 simpleGrantedAuthorities);
         return userDetails;
     }

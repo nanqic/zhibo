@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,10 +21,10 @@ public class LocalAuthenticationSuccessHandler implements AuthenticationSuccessH
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         httpServletResponse.setCharacterEncoding("utf-8");
         httpServletResponse.setContentType("application/json;charset=utf-8");
-        Cookie cookie = new Cookie("username", user.getUsername());
+        // 将用户角色存到cookie中，返回给前端
+        String role = user.getAuthorities().toString().replace("[","").replace("]","");
+        Cookie cookie = new Cookie("userRole",role);
         httpServletResponse.addCookie(cookie);
         httpServletResponse.getWriter().print(RespVO.ok("ok"));
-
     }
-
 }

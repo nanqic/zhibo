@@ -26,12 +26,9 @@ public class UserController {
         System.out.println(vo);
         return userService.updatePasswd(vo);
     }
-    @GetMapping("/user/list/{index}/{size}")
-    RespVO userList(@PathVariable("index") int index, @PathVariable("size") int size) {
-        return userService.userList(index, size);
-    }
+
     @GetMapping("/user/loginRes")
-    RespVO getLoginResults(){
+    RespVO getLoginResults() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userService.getLoginResults(user.getUsername());
     }

@@ -1,8 +1,6 @@
 package me.hj.zhibo.controller;
 
-
 import me.hj.zhibo.service.IUserInofService;
-import me.hj.zhibo.vo.NewPasswordVO;
 import me.hj.zhibo.vo.RespVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +13,6 @@ public class UserInfoController {
     private IUserInofService userInfoService;
     @GetMapping("/info/{uid}")
     RespVO userInfo(@PathVariable("uid") int uid){
-//        Integer uid = (int)session.getAttribute("uid");
         if (uid>40)
             return userInfoService.getStudents(uid);
 

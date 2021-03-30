@@ -32,7 +32,7 @@ class UserServiceImplTest {
 
     @Test
     void tests(){
-        System.out.println(userService.userList(1, 3));
+//        System.out.println(userService.userList(1, 3));
     }
 
 

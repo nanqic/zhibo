@@ -10,4 +10,5 @@ public class UserListVO {
     private String name;
     private String username;
     private String roleName;
+    private Integer enabled;
 }

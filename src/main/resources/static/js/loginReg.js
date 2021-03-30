@@ -54,9 +54,15 @@ function doLogin() {
         .then(resp => {
             let loginInfo = document.querySelector('#login-info')
             loginInfo.innerHTML = ""
-            if (resp.status == 200) {
+            console.log(resp);
+            if (resp.data == 'error') {
+
+                loginInfo.style.color = 'red'
+                loginInfo.innerHTML = "登录失败，用户名或密码错误"
+
+            } else {
                 loginInfo.style.color = "#0dcaf0"
-                loginInfo.innerHTML = "登录成功！ " + "2秒后自动关闭"
+                loginInfo.innerHTML = "登录成功！ " + "2秒后自动跳转到首页"
                 // 登录成功后跳转到首页
                 refresh()
 
@@ -67,9 +73,6 @@ function doLogin() {
                         }, 2000)
                     })
                 }
-            } else {
-                loginInfo.style.color = 'red'
-                loginInfo.innerHTML = "登录失败，用户名或密码错误"
             }
         })
 }
