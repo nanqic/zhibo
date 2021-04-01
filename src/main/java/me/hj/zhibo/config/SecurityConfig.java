@@ -16,6 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("管理员")
+                .antMatchers("/teacher/**").hasAnyAuthority("教师")
                 .anyRequest().authenticated();// 所有请求页面必须授权后才能访问formLogin()
         // 配置表单登录
         http.formLogin()

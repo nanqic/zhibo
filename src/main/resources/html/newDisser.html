@@ -22,6 +22,7 @@
         <button type="button" class="btn btn-success text-light" onclick="save()">上传题目</button>
     </form>
 </div>
+<script src="bootstrap/js/bootstrap.bundle.js"></script>
 <script src="js/axios.min.js"></script>
 <script>
     function save(){
@@ -36,14 +37,10 @@
             alert("文件大小超过限制");
             return;
         }
-        // 读取cookie信息
-        let userInfo = docCookies.getItem('user')
-        let uid = JSON.parse(userInfo).uid
         let formData = new FormData()
         formData.append("file", file.files[0]);
         formData.append("name", name)
-        formData.append("uid", uid)
-        axios.post("/disser/upload",formData)
+        axios.post("/teacher/disser",formData)
         alert("上传成功！")
         // 跳转到列表页
         let disser = window.parent.document.querySelector('.disser-list')
@@ -51,9 +48,6 @@
 
     }
 </script>
-<script src="bootstrap/js/bootstrap.bundle.js"></script>
-<script src="js/docCookies.js"></script>
-
 </body>
 
 </html>

@@ -17,8 +17,5 @@ public class AnnounceController {
         return service.getPage(index,size);
     }
 
-    @PostMapping("/new")
-    RespVO newAnno(@RequestBody Announce a) {
-        return service.newAnno(a.getTitle(), a.getContent());
-    }
+
 }

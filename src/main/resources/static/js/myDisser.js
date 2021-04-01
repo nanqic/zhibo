@@ -1,4 +1,5 @@
 initData()
+
 // 创建表格节点
 function create(did, name, path) {
     const tbody = document.querySelector('.tbody')
@@ -26,20 +27,21 @@ function create(did, name, path) {
     tr.appendChild(td3)
     tbody.appendChild(tr)
     // 监听下载按钮
-    btn0.onclick = ()=> download(name,path)
+    btn0.onclick = () => download(name,path)
     // 监听删除按钮
-    btn.onclick = ()=> deleteDisser(did,path)
+    btn.onclick = () => deleteDisser(did, path)
 }
+
 // 创建表格
-function createTable(data){
+function createTable(data) {
     data.records.forEach((col) => {
-        create(col.did,col.name,col.path)
+        create(col.did, col.name, col.path)
     })
 }
+
 // 下载题目文档
-function download(name,path){
-    console.log(name);
-    axios.get("/disser/download?path=" + path,{
+function download(name,path) {
+    axios.get("/file/disser?path="+path, {
         responseType: 'blob'
     })
         .then(res => {
@@ -51,35 +53,37 @@ function download(name,path){
                 } else {
                     let contentDisposition = res.headers['content-disposition'];
                     // 以题目为文件命名
-                    let fileName = '题目：'+name +'.pdf';
+                    let fileName = '题目：' + name + '.pdf';
                     executeDownload(data, fileName);
                 }
             };
             reader.readAsText(data);
         })
 }
+
 // 删除题目
-function deleteDisser(did,path){
-    if (confirm("确认删除Id为"+did+"的课题吗？")) {
-        axios.post("/disser/delete?did="+parseInt(did)+"&path="+path)
+function deleteDisser(did, path) {
+    let params = new FormData()
+    params.append("did",did)
+    params.append("path",path)
+    if (confirm("确认删除Id为" + did + "的课题吗？")) {
+        axios.delete("/teacher/", {data:params})
             .then(resp => {
-                if (resp.status ===200){
+                if (resp.status === 200) {
                     window.location.reload()
                 }
             })
     }
 }
+
 // 获取数据
 function initData() {
-    // 读取cookie信息
-    let userInfo = docCookies.getItem('user')
-    let uid = JSON.parse(userInfo).uid
-    axios.get('/disser/my/1/7?uid='+uid)
+    axios.get('/teacher/1/7')
         .then(resp => {
             let data = resp.data.data
             // console.log(data);
             data.records.forEach((col) => {
-                create(col.did, col.name,col.path)
+                create(col.did, col.name, col.path)
             })
             //生成翻页下标
             for (let p = 1; p <= data.pages; p++) {
@@ -87,6 +91,7 @@ function initData() {
             }
         })
 }
+
 // 初始化翻页下标
 function initPageList(i) {
     const pageList = document.querySelector("#page-list")
@@ -107,15 +112,16 @@ function initPageList(i) {
         li.classList.add('active')
     }
 }
+
 // 刷新卡片数据
-function reloadData(i){
+function reloadData(i) {
     axios.get("/disser/list/" + i + "/7")
         .then(resp => {
             let data = resp.data.data
             // 移除旧的节点
             const table = document.querySelector('.table')
             const tbody = document.querySelector('.tbody')
-            if(tbody!=undefined){
+            if (tbody != undefined) {
                 table.removeChild(tbody)
             }
             // 生成新的节点
@@ -129,32 +135,36 @@ function reloadData(i){
 
             const prevPage = document.getElementById('prev-page')
             const nextPage = document.getElementById('next-page')
-            currentPage==1?prevPage.className=('page-item disabled'):prevPage.className=('page-item')
-            currentPage==totalPage?nextPage.classList.add('disabled'):nextPage.className=('page-item')
-            nextPage.onclick=()=> toNextPage(currentPage,totalPage)
-            prevPage.onclick=()=> toPrevPage(currentPage)
+            currentPage == 1 ? prevPage.className = ('page-item disabled') : prevPage.className = ('page-item')
+            currentPage == totalPage ? nextPage.classList.add('disabled') : nextPage.className = ('page-item')
+            nextPage.onclick = () => toNextPage(currentPage, totalPage)
+            prevPage.onclick = () => toPrevPage(currentPage)
         })
 }
-function toNextPage(currentPage,totalPage){
+
+function toNextPage(currentPage, totalPage) {
     const pages = document.querySelectorAll('.page-item')
-    if(currentPage<totalPage) reloadData(++currentPage)
+    if (currentPage < totalPage) reloadData(++currentPage)
     resetActive()
     pages[currentPage].classList.add('active')
 
 }
-function toPrevPage(currentPage){
+
+function toPrevPage(currentPage) {
     const pages = document.querySelectorAll('.page-item')
-    if(currentPage>1) {
+    if (currentPage > 1) {
         reloadData(--currentPage)
         resetActive()
         pages[currentPage].classList.add('active')
     }
 }
+
 // 重置激活按钮
-function resetActive(){
+function resetActive() {
     let actived = document.querySelector('.active')
-    if(actived!=null) actived.classList.remove('active')
+    if (actived != null) actived.classList.remove('active')
 }
+
 //  模拟点击a 标签进行下载
 function executeDownload(data, fileName) {
     if (!data) {

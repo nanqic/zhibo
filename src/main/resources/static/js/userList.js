@@ -11,7 +11,7 @@ function create(username, name, role, enabled) {
     if(enabled==0){
         statusText.className = 'text text-danger'
         btnSetEnable.className = 'btn btn-primary'
-        statusText.innerHTML = '已禁用'
+        statusText.innerHTML = '禁用'
         btnSetEnable.innerHTML = '启用'
         btnSetEnable.onclick = () => enableUser(username)
     }else{
@@ -47,7 +47,7 @@ function create(username, name, role, enabled) {
 
 // 加载数据
 function loadData(i = 1, bool = false) {
-    axios.get('/admin/userList/' + i + '/7')
+    axios.get('/admin/users/' + i + '/7')
         .then(resp => {
             let data = resp.data.data
             let table = document.querySelector('.table')
@@ -86,7 +86,7 @@ function loadData(i = 1, bool = false) {
 // 删除用户
 function deleteUser(username) {
     if (confirm("确认删除账号为：" + username + " 的用户吗？")) {
-        axios.put('/admin/deleteUser/' + username)
+        axios.patch('/admin/delete/' + username)
             .then(alert("删除成功！"))
             .then(location.reload())
     }
@@ -95,7 +95,7 @@ function deleteUser(username) {
 // 重置用户
 function resetUser(username) {
     if (confirm("确认重置账号为：" + username + " 的用户吗？")) {
-        axios.put('/admin/resetUser/' + username)
+        axios.patch('/admin/reset/' + username)
             .then(alert("重置成功！"))
             .then(location.reload())
     }
@@ -105,7 +105,7 @@ function resetUser(username) {
 //
 function disableUser(username) {
     if (confirm("确认禁用号为：" + username + " 的用户吗？")) {
-        axios.put('/admin/disableUser/' + username)
+        axios.patch('/admin/disable/' + username)
             .then(alert("禁用成功！"))
             .then(location.reload())
     }
@@ -115,7 +115,7 @@ function disableUser(username) {
 // 禁用用户,取消禁用用户
 function enableUser(username) {
     if (confirm("确认取消禁用账号为：" + username + " 的用户吗？")) {
-        axios.put('/admin/enableUser/' + username)
+        axios.patch('/admin/enable/' + username)
             .then(alert("启用成功！"))
             .then(location.reload())
     }

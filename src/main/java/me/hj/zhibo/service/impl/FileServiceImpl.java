@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import utils.UserIdUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -27,7 +29,7 @@ public class FileServiceImpl implements IFileService {
     @Autowired
     private FileMapper mapper;
     @Override
-    public RespVO uploadFile(MultipartFile file, int uid) throws IOException {
+    public RespVO uploadFile(MultipartFile file) throws IOException {
         // 获取初始文件名
         String oldName = file.getOriginalFilename();
         // 限制文件大小为2M
@@ -48,7 +50,7 @@ public class FileServiceImpl implements IFileService {
         // 将文件路径存入数据库
         FileEntity fileEntity = new FileEntity()
                 .setPath(newName)
-                .setUid(uid);
+                .setUid(new UserIdUtil().getUid());
         mapper.insert(fileEntity);
 
         return RespVO.ok("ok");

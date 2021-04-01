@@ -54,7 +54,7 @@ function doLogin() {
         .then(resp => {
             let loginInfo = document.querySelector('#login-info')
             loginInfo.innerHTML = ""
-            console.log(resp);
+            // console.log(resp);
             if (resp.data == 'error') {
 
                 loginInfo.style.color = 'red'

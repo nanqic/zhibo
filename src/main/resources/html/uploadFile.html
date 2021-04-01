@@ -34,12 +34,8 @@
                 alert("文件大小超过限制");
                 return;
             }
-            // 读取cookie信息
-            let userInfo = docCookies.getItem('user')
-            let uid = JSON.parse(userInfo).uid
             let formData = new FormData()
             formData.append("file", file.files[0]);
-            formData.append("uid", uid)
             axios({
                 method: 'post',
                 url: '/file/upload',

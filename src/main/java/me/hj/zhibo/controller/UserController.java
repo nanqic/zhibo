@@ -21,9 +21,8 @@ public class UserController {
         return userService.register(vo);
     }
 
-    @PostMapping("/user/newPassword")
+    @PatchMapping("/user/newPassword")
     RespVO updatePasswd(@RequestBody NewPasswordVO vo) {
-        System.out.println(vo);
         return userService.updatePasswd(vo);
     }
 

@@ -11,8 +11,7 @@ public class Dissertation {
     @TableId(type = IdType.AUTO)
     private Integer did;
     private String name;
-    private Integer count;
     private String path;
-    private String teacher;
-    private Integer status;
+    private Integer uid;
+    private Integer status;// 选题状态
 }

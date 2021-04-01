@@ -7,6 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface IFileService {
-    RespVO uploadFile(MultipartFile file, int uid) throws IOException;
+    RespVO uploadFile(MultipartFile file) throws IOException;
     RespVO fileList(int index);
 }

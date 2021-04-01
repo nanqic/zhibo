@@ -34,7 +34,7 @@
        let account = JSON.parse(docCookies.getItem('user')).account
        let curPassword = document.querySelector('#cur-password').value
        let newPassword = document.querySelector('#new-password').value
-       axios.post("/user/newPassword",
+       axios.patch("/user/newPassword",
            {
                account: account,
                curPassword: curPassword,
@@ -43,8 +43,7 @@
        ).then(resp=>{
            if (resp.data.status==200){
                alert("修改成功，请重新登录！")
-               axios.get("/user/logout")
-               docCookies.removeItem('user')
+               axios("/logout")
                // 刷新父页面
                window.parent.location.reload()
            }

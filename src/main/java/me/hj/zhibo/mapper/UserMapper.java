@@ -22,8 +22,8 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select u.uid, u.username, u.enabled, r.role_name, i.name from (tb_user u left join tb_user_role r on u.role_id=r.role_id) left join tb_user_info i on u.uid=i.uid WHERE u.role_id BETWEEN 1 and 2")
     IPage<UserListVO> getUserList(Page<UserListVO> page);
 
-    // 查询id!=4的用户
-    @Select("select u.username, u.password, r.role_name from tb_user u left join tb_user_role r on u.role_id=r.role_id where u.role_id<>4 and u.enabled=1 and u.username=#{username}")
+    // 查询正常用户（id!=4）
+    @Select("select u.uid, u.username, u.password, r.role_name from tb_user u left join tb_user_role r on u.role_id=r.role_id where u.role_id<>4 and u.enabled=1 and u.username=#{username}")
     UserLoginVO getUserLogin(String username);
 
     @Select("select u.uid,r.role_name,i.name, i.major, i.class_name, i.graduation from (tb_user u left join tb_user_role r on u.role_id=r.role_id) LEFT JOIN tb_user_info i on u.uid=i.uid where u.username=#{username}")

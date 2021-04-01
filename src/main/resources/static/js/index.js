@@ -58,7 +58,6 @@ function init() {
             let adminCenter = document.querySelector('#admin-center')
             adminCenter.className='nav-menu'
         }
-
         // 创建梳子导航
         crumbNav()
     }

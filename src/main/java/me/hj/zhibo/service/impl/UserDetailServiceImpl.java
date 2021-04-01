@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import java.util.List;
 public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private HttpSession session;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -27,6 +30,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (ObjectUtils.isEmpty(vo)) throw new UsernameNotFoundException("账号错误或用户不存在");
         // 根据查到的角色，创建相应的角色
         String role = vo.getRoleName();
+        // 将uid存入session
+        session.setAttribute("uid",vo.getUid());
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role));
         // 这里传入数据库查到的密码，security框架会自动校验

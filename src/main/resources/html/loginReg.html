@@ -24,11 +24,13 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <form class="needs-validation" novalidate action="/login" method="post">
+                            <form class="was-validated needs-validation" novalidate action="/login" method="post">
                                 <div class="mb-3">
                                     <label for="login-account" class="col-form-label">账号：</label>
                                     <input type="text" class="form-control" id="login-account"
-                                           autocomplete="username" name="username" required/>
+                                           autocomplete="username" name="username"
+                                           pattern="[0-9,a-z]{5,12}"
+                                           required/>
                                     <div class="invalid-feedback">
                                         请输入你的学号或教职工号
                                     </div>
@@ -38,6 +40,7 @@
                                     <input type="password" class="form-control" autocomplete="current-password"
                                            id="login-password"
                                            name="password"
+                                           pattern="[0-9A-Za-z]{3,20}"
                                            required/>
                                     <div class="invalid-feedback">
                                         请输入你的密码
@@ -69,7 +72,8 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="form-reg" class="was-validated needs-validation" novalidate method="post" action="/register">
+                            <form id="form-reg" class="was-validated needs-validation" novalidate method="post"
+                                  action="/register">
                                 <div class="mb-3">
                                     <label for="reg-name" class="col-form-label">姓名：</label>
                                     <input type="text" class="form-control" id="reg-name" required
@@ -82,7 +86,7 @@
                                     <label for="reg-account" class="col-form-label">账号：</label>
                                     <input type="text" class="form-control" id="reg-account" autocomplete="username"
                                            required
-                                           pattern="[0-9]{8,12}"/>
+                                           pattern="[0-9,a-z]{5,12}"/>
                                     <div class="invalid-feedback">
                                         输入你的学号或教职工号
                                     </div>

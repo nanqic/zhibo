@@ -11,27 +11,27 @@ public class AdminController {
     @Autowired
     private IAdminService adminService;
 
-    @GetMapping("/userList/{index}/{size}")
+    @GetMapping("/users/{index}/{size}")
     RespVO userList(@PathVariable("index") int index, @PathVariable("size") int size) {
         return adminService.userList(index, size);
     }
 
-    @PutMapping("/resetUser/{username}")
+    @PatchMapping("/reset/{username}")
     RespVO resetUser(@PathVariable String username) {
         return adminService.resetUser(username);
     }
 
-    @PutMapping("/deleteUser/{username}")
+    @PatchMapping("/delete/{username}")
     RespVO deleteUser(@PathVariable String username) {
         return adminService.deleteUser(username);
     }
 
-    @PutMapping("/disableUser/{username}")
+    @PatchMapping("/disable/{username}")
     RespVO disableUser(@PathVariable String username) {
         return adminService.disableUser(username);
     }
 
-    @PutMapping("/enableUser/{username}")
+    @PatchMapping("/enable/{username}")
     RespVO enableUser(@PathVariable String username) {
         return adminService.enableUser(username);
     }

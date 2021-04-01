@@ -1,5 +1,6 @@
 HELP.md
 target/
+upload/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -18,7 +19,8 @@ target/
 *.iws
 *.iml
 *.ipr
-target
+
+
 
 ### DS_Store ###
 .DS_Store
