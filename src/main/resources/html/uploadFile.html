@@ -40,11 +40,19 @@
                 method: 'post',
                 url: '/file/upload',
                 data: formData,
-            }).then(()=>{
-                let disser = window.parent.document.querySelector('.disser-list')
-                disser.click()
+            }).then( resp=> {
+
+                if (resp.data.status==200){
+                    alert("上传成功！")
+                    // 跳转到fileList页
+                    let disser = window.parent.document.querySelector('#file-list')
+                    disser.click()
+                }else {
+                    alert(resp.data.msg)
+                }
+
             })
-            alert("上传成功！")
+
             // 跳转到列表页
 
 

@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 public class DissertationVO {
     private Integer did;
     private String name;
-    private Integer count;
     private String path;
     private String teacher;
     private Integer status;

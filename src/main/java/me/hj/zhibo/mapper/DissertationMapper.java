@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DissertationMapper extends BaseMapper<Dissertation> {
     @Select("select * from tb_dissertation d where d.uid=#{uid}")
-    IPage<DissertationVO> getDissertation(int uid, Page<DissertationVO> page);
+    IPage<DissertationVO> getMyDissertation(int uid, Page<DissertationVO> page);
 }

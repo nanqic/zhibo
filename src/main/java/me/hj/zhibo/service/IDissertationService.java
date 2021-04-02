@@ -8,9 +8,13 @@ import java.io.FileNotFoundException;
 
 public interface IDissertationService {
     RespVO newDisser(MultipartFile file, String name);
+
     ResponseEntity download(String path) throws FileNotFoundException;
+
     RespVO disserList(int index, int size);
+
     RespVO delete(int did, String path) throws FileNotFoundException;
-//    RespVO getOne(int uid);
-    RespVO submitDisser(Integer did);
+
+    //    RespVO getOne(int uid);
+    RespVO saveDisser(Integer did);
 }

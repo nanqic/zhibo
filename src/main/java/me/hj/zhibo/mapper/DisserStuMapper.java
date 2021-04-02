@@ -1,9 +1,9 @@
 package me.hj.zhibo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import me.hj.zhibo.entity.DisserUser;
+import me.hj.zhibo.entity.DisserStu;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DisserUserMapper extends BaseMapper<DisserUser> {
+public interface DisserStuMapper extends BaseMapper<DisserStu> {
 }

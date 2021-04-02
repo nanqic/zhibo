@@ -1,30 +1,29 @@
 package me.hj.zhibo.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import me.hj.zhibo.utils.UserUtil;
 import me.hj.zhibo.vo.*;
 import me.hj.zhibo.entity.User;
 import me.hj.zhibo.mapper.UserMapper;
 import me.hj.zhibo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import javax.servlet.http.HttpSession;
 
-
+import javax.rmi.CORBA.Util;
 
 @Service
 public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    HttpSession session;
-    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserDetaislServiceImpl userDetailsService;
+
     @Override
     public RespVO register(UserRegisterVO vo) {
         UserRegisterVO matchedVO = userMapper.getUserRegister(vo.getUsername());
@@ -52,29 +51,24 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public RespVO updatePasswd(NewPasswordVO vo) {
+    public RespVO updatePasswd(UpdatePasswordVO vo) {
+        String username = UserUtil.getCurrentUser().getUsername();
+        String curPassword = userMapper.getUserLogin(username).getPassword();
+        boolean matches = passwordEncoder.matches(vo.getOldPassword(), curPassword);
+        if (matches) {
+            int row = userMapper.updatePassword(passwordEncoder.encode(vo.getNewPassword()), username);
+            if (row == 1) return RespVO.ok("修改成功！");
 
-        String pw = passwordEncoder.encode(vo.getCurPassword());
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("username", vo.getUsername());
-        wrapper.eq("password", pw);
-        User matchedUser = userMapper.selectOne(wrapper);
-        // 如果查询不到用户，提示原密码错误
-        if(ObjectUtils.isEmpty(matchedUser)) return RespVO.error("原密码错误");
-        User user = new User()
-                .setPassword(vo.getNewPassword())
-                .setUid(1);
-        int row = userMapper.updateById(user);
-        if (row == 1)
-        return RespVO.ok("修改成功！");
+            return RespVO.ok("修改失败！");
+        }
+        return RespVO.error("原密码不正确！");
 
-        return  RespVO.error("服务器内部错误");
     }
 
     @Override
     public RespVO getLoginResults(String username) {
         LoginResultsVO vo = userMapper.getLoginResults(username);
-        return RespVO.ok("ok",vo);
+        return RespVO.ok("ok", vo);
     }
 
 }

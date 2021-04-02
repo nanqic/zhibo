@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 通告信息实体类，指引管理员才可以发表通告
+ * 通告信息实体类，只有老师才可以发表通告
  */
 @Accessors(chain = true)
 @Data
@@ -19,6 +19,7 @@ public class Announce {
     private Integer aid;
     private String title;
     private String content;
+    private Integer uid;
     @TableField(fill= FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 }

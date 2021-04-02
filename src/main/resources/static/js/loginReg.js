@@ -76,3 +76,7 @@ function doLogin() {
             }
         })
 }
+
+let loginModal = new bootstrap.Modal(document.querySelector('#loginModal'))
+
+loginModal.show()

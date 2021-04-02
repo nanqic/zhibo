@@ -1,7 +1,7 @@
 // 初始化页面数据
 initData()
 // 动态创建card
-function newCard(title, text, date) {
+function newCard(title, text,teacher, date) {
     //绑定父节点
     const cardGroup = document.querySelector('div.card-group')
     //创建元素
@@ -15,7 +15,7 @@ function newCard(title, text, date) {
     //添加文本元素
     title = document.createTextNode(title)
     text = document.createTextNode(text)
-    date = document.createTextNode("更新时间：" + date)
+    date = document.createTextNode(teacher+"  " + date)
     //给元素设置类名
     card.className = "card"
     cardBody.className = "card-body"
@@ -68,7 +68,7 @@ function initData() {
                 let jTiem = new Date(r.updateTime).toJSON()
                 let fTime =new Date(+new Date(jTiem)+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'');
 
-                newCard(r.title, r.content, fTime)
+                newCard(r.title, r.content, r.name,fTime)
             })
             //生成翻页下标
             for (let p = 1; p <= data.pages; p++) {

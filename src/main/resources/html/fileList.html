@@ -50,7 +50,7 @@
             .then( resp =>{
                 let data = resp.data.data
                 data.records.forEach(col => {
-                    create(col.id,col.path,col.uploader)
+                    create(col.id,"docs/"+col.path,col.uploader)
                 })
                 }
             )

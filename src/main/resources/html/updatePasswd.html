@@ -30,14 +30,11 @@
 <script>
 
    function update(){
-       // 从cookie获取用户账号
-       let account = JSON.parse(docCookies.getItem('user')).account
-       let curPassword = document.querySelector('#cur-password').value
+       let oldPassword = document.querySelector('#cur-password').value
        let newPassword = document.querySelector('#new-password').value
-       axios.patch("/user/newPassword",
+       axios.patch("/user/password",
            {
-               account: account,
-               curPassword: curPassword,
+               oldPassword: oldPassword,
                newPassword: newPassword
            }
        ).then(resp=>{

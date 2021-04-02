@@ -9,17 +9,5 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserInfoServiceImplTest {
-    @Autowired
-    IUserInofService service;
-
-    @Test
-    void test(){
-        System.out.println(service.getTeacher(2));
-    }
-
-    @Test
-    void testTeach(){
-        System.out.println(service.getStudents(41));
-    }
 
 }

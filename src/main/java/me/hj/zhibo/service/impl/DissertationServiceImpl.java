@@ -1,14 +1,15 @@
 package me.hj.zhibo.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import me.hj.zhibo.entity.DisserUser;
+import me.hj.zhibo.entity.DisserStu;
 import me.hj.zhibo.entity.Dissertation;
-import me.hj.zhibo.mapper.DisserUserMapper;
+import me.hj.zhibo.mapper.DisserStuMapper;
 import me.hj.zhibo.mapper.DissertationMapper;
 import me.hj.zhibo.mapper.UserInfoMapper;
+import me.hj.zhibo.mapper.UserMapper;
 import me.hj.zhibo.service.IDissertationService;
+import me.hj.zhibo.utils.UserUtil;
 import me.hj.zhibo.vo.DissertationVO;
 import me.hj.zhibo.vo.RespVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,11 +39,11 @@ public class DissertationServiceImpl implements IDissertationService {
     @Autowired
     private UserInfoMapper infoMapper;
     @Autowired
-    private DisserUserMapper duMapper;
+    private DisserStuMapper duMapper;
     @Autowired
     private DissertationMapper dissertationMapper;
     @Autowired
-    private HttpSession session;
+    private UserMapper userMapper;
 
     // 发布新的论文题目
     @Override
@@ -76,7 +76,7 @@ public class DissertationServiceImpl implements IDissertationService {
             Dissertation disser = new Dissertation()
                     .setName(name)
                     .setPath(dbPath)
-                    .setUid(this.getUid());
+                    .setUid(userMapper.getUid(UserUtil.getCurrentUser().getUsername()));
             mapper.insert(disser);
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,7 +111,7 @@ public class DissertationServiceImpl implements IDissertationService {
     public RespVO disserList(int index, int size) {
         // 查寻指定老师的题目
         Page<DissertationVO> page = new Page<>(index, size);
-        IPage<DissertationVO> resPage = mapper.getDissertation(getUid(),page);
+        IPage<DissertationVO> resPage = mapper.getMyDissertation(getUid(), page);
         return RespVO.ok("查询成功", resPage);
     }
 
@@ -127,26 +127,20 @@ public class DissertationServiceImpl implements IDissertationService {
         return RespVO.ok("删除成功！");
     }
 
-//    @Override
-//    public RespVO getOne(int uid) {
-//        Dissertation d = mapper.selectByUid(uid);
-//        return RespVO.ok("ok", d);
-//    }
-
 
     @Override
-    public RespVO submitDisser(Integer did) {
-        DisserUser du = new DisserUser()
+    public RespVO saveDisser(Integer did) {
+        DisserStu du = new DisserStu()
                 .setDid(did)
-                .setUid(1);
+                .setUid(getUid());
         duMapper.insert(du);
         Dissertation dissertation = new Dissertation()
                 .setDid(did).setStatus(1);
         dissertationMapper.updateById(dissertation);
         return RespVO.ok("ok");
     }
-
-    private int getUid() {
-        return Integer.parseInt(session.getAttribute("uid").toString());
+    public int getUid() {
+        int uid = userMapper.getUid(UserUtil.getCurrentUser().getUsername());
+        return uid;
     }
 }

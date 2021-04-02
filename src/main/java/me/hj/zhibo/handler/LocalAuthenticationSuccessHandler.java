@@ -1,8 +1,6 @@
 package me.hj.zhibo.handler;
 
-import me.hj.zhibo.service.impl.UserDetailServiceImpl;
 import me.hj.zhibo.vo.RespVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -25,8 +23,8 @@ public class LocalAuthenticationSuccessHandler implements AuthenticationSuccessH
         httpServletResponse.setCharacterEncoding("utf-8");
         httpServletResponse.setContentType("application/json;charset=utf-8");
         // 将用户角色存到cookie中，返回给前端
-        String role = user.getAuthorities().toString().replace("[","").replace("]","");
-        Cookie cookie = new Cookie("userRole", URLEncoder.encode(role,"utf-8"));
+        String role = user.getAuthorities().toString().replace("[", "").replace("]", "");
+        Cookie cookie = new Cookie("userRole", URLEncoder.encode(role, "utf-8"));
         httpServletResponse.addCookie(cookie);
         httpServletResponse.getWriter().print(RespVO.ok("ok"));
     }

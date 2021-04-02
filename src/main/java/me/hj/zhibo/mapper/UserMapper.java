@@ -19,11 +19,11 @@ public interface UserMapper extends BaseMapper<User> {
     UserRegisterVO getUserRegister(String username);
 
     // 只查询老师和学生用户
-    @Select("select u.uid, u.username, u.enabled, r.role_name, i.name from (tb_user u left join tb_user_role r on u.role_id=r.role_id) left join tb_user_info i on u.uid=i.uid WHERE u.role_id BETWEEN 1 and 2")
+    @Select("select u.uid, u.username, u.enabled, r.role_name, i.name from (tb_user u left join tb_user_role r on u.role_id=r.role_id) left join tb_user_info i on u.uid=i.uid WHERE enabled<>4 and u.role_id BETWEEN 1 and 2")
     IPage<UserListVO> getUserList(Page<UserListVO> page);
 
-    // 查询正常用户（id!=4）
-    @Select("select u.uid, u.username, u.password, r.role_name from tb_user u left join tb_user_role r on u.role_id=r.role_id where u.role_id<>4 and u.enabled=1 and u.username=#{username}")
+    // 登录时，查询正常用户
+    @Select("select u.uid, u.username, u.password, u.enabled, r.role_name from tb_user u left join tb_user_role r on u.role_id=r.role_id where u.enabled=1 and u.username=#{username}")
     UserLoginVO getUserLogin(String username);
 
     @Select("select u.uid,r.role_name,i.name, i.major, i.class_name, i.graduation from (tb_user u left join tb_user_role r on u.role_id=r.role_id) LEFT JOIN tb_user_info i on u.uid=i.uid where u.username=#{username}")
@@ -38,7 +38,13 @@ public interface UserMapper extends BaseMapper<User> {
     @Update("UPDATE tb_user set enabled=1 WHERE username=#{username}")
     int enableUser(String username);
 
-    // 软删除，设置role_id=4
-    @Update("update tb_user set role_id=4 where username=#{username}")
+    // 软删除，设置enabled=4
+    @Update("update tb_user set enabled=4 where username=#{username}")
     int deleteUser(String username);
+
+    @Update("update tb_user set password=#{password} where username=#{username}")
+    int updatePassword(String password,String username);
+
+    @Select("select uid from tb_user where username=#{username}")
+    int getUid(String username);
 }

@@ -1,6 +1,6 @@
 package me.hj.zhibo.controller;
 
-import me.hj.zhibo.vo.NewPasswordVO;
+import me.hj.zhibo.vo.UpdatePasswordVO;
 import me.hj.zhibo.vo.RespVO;
 import me.hj.zhibo.service.IUserService;
 import me.hj.zhibo.vo.UserRegisterVO;
@@ -21,8 +21,8 @@ public class UserController {
         return userService.register(vo);
     }
 
-    @PatchMapping("/user/newPassword")
-    RespVO updatePasswd(@RequestBody NewPasswordVO vo) {
+    @PatchMapping("/user/password")
+    RespVO updatePasswd(@RequestBody UpdatePasswordVO vo) {
         return userService.updatePasswd(vo);
     }
 

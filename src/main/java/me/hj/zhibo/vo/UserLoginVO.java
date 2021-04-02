@@ -6,5 +6,6 @@ public class UserLoginVO {
     private Integer uid;
     private String username; //对应学号或教职工号,管理员账号
     private String password;
+    private Integer enabled;
     private String roleName;
 }
