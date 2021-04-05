@@ -1,6 +1,7 @@
 HELP.md
 target/
 upload/
+.DS_Store
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -20,10 +21,6 @@ upload/
 *.iml
 *.ipr
 
-
-
-### DS_Store ###
-.DS_Store
 
 ### NetBeans ###
 /nbproject/private/

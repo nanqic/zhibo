@@ -21,8 +21,6 @@ public class UserServiceImpl implements IUserService {
     private UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserDetaislServiceImpl userDetailsService;
 
     @Override
     public RespVO register(UserRegisterVO vo) {
@@ -33,7 +31,7 @@ public class UserServiceImpl implements IUserService {
         }
         // 先判断姓名与账号是否匹配，再判断密码是否被初始化
         if (ObjectUtils.isEmpty(matchedVO)) return RespVO.error("请输入合法的账号！");
-        if (!matchedVO.getName().equals(matchedVO.getName())) return RespVO.error("姓名与账号不匹配，请检查是否输入错误");
+        if (!matchedVO.getName().equals(vo.getName())) return RespVO.error("姓名与账号不匹配，请检查是否输入错误");
         if (StringUtils.isNotBlank(matchedVO.getPassword())) {
             return RespVO.error("账号已被注册，如非本人注册，请联系管理员处理");
         }
