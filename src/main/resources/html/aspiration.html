@@ -16,13 +16,15 @@
               <th scope="col">指导教师</th>
               <th scope="col">课题名称</th>
               <th scope="col">录取状态</th>
+              <th scope="col">操作</th>
           </tr>
           </thead>
           <tbody>
           <tr>
-              <td class="table-warning">车老师</td>
-              <td class="table-info">Javaweb餐厅管理</td>
-              <td class="table-success">已录取</td>
+              <td class="table-warning"></td>
+              <td class="table-info"></td>
+              <td class="table-success"></td>
+              <td><button class="btn btn-warning" onclick="abort()">退选志愿</button></td>
           </tr>
 
           </tbody>
@@ -32,25 +34,42 @@
           <script src="bootstrap/js/bootstrap.bundle.js"></script>
           <script src="js/docCookies.js"></script>
         <script>
-            // 读取cookie信息
-            let userInfo = docCookies.getItem('user')
-            if(userInfo!=null){
-                let uid = JSON.parse(userInfo).uid
-                loadData(uid)
-            }
+            loadData()
+            let did
             // 查询志愿信息
-            function loadData(uid){
-                axios("/disser/select/"+uid)
+            function loadData(){
+                axios("/student/aspir")
                 .then(resp => {
-                    const data = resp.data.data
-                    let status = data.status==0?'未录取':'已录取'
-                    console.log(status);
-                    const teacherTd = document.querySelector('.table-warning')
-                    const nameTd = document.querySelector('.table-info')
-                    const statusTd = document.querySelector('.table-success')
-                    teacherTd.innerHTML = data.teacher
-                    nameTd.innerHTML = data.name
-                    statusTd.innerHTML = status
+                    if (resp.data.data != null){
+                        const data = resp.data.data
+                        did = resp.data.data.did
+                        console.log(did)
+                        let status = data.status==0?'未录取':'已录取'
+                        // console.log(status);
+                        const teacherTd = document.querySelector('.table-warning')
+                        const nameTd = document.querySelector('.table-info')
+                        const statusTd = document.querySelector('.table-success')
+                        teacherTd.innerHTML = data.teacher
+                        nameTd.innerHTML = '《 '+data.name+' 》'
+                        statusTd.innerHTML = status
+                    }else {
+                        let container = document.querySelector('.container')
+                        let table = document.querySelector('.table')
+                        container.removeChild(table)
+                        container.innerHTML = '未选择志愿'
+                    }
+
+                })
+            }
+            function abort(){
+                axios('/student/abort?did='+did)
+                .then(resp => {
+                    if (resp.data.status==200){
+                        alert("退选成功！")
+                        location.reload()
+                    }else {
+                        alert("退选失败")
+                    }
                 })
             }
         </script>

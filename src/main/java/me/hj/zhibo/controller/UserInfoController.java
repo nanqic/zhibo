@@ -11,16 +11,16 @@ public class UserInfoController {
     @Autowired
     private IUserInofService userInfoService;
 
-    @GetMapping("/stu/info")
+    @GetMapping("/info/stu")
     RespVO stuInfo() {
         return userInfoService.getStudentInfo();
     }
 
-    @GetMapping("/teacher/info")
+    @GetMapping("/info/t")
     RespVO teacherInfo() {
         return userInfoService.getTeacherInfo();
     }
-    @GetMapping("/teacherInfo/{name}")
+    @GetMapping("/info/{name}")
     RespVO getInfoByName(@PathVariable("name") String name) {
         return userInfoService.getInfoByName(name);
     }

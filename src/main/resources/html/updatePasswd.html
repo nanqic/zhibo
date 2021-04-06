@@ -41,8 +41,9 @@
            if (resp.data.status==200){
                alert("修改成功，请重新登录！")
                axios("/logout")
+               .then(()=>window.parent.location.replace("/loginReg.html"))
                // 刷新父页面
-               window.parent.location.reload()
+
            }
        })
    }

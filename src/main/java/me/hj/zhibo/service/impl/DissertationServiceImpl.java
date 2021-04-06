@@ -1,5 +1,6 @@
 package me.hj.zhibo.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.hj.zhibo.entity.DisserStu;
@@ -25,25 +26,36 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Wrapper;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class DissertationServiceImpl implements IDissertationService {
+
+
     //绑定文件上传路径到uploadPath
     @Value("${web.upload-path}")
     private String uploadPath;
     @Autowired
     private DissertationMapper mapper;
     @Autowired
-    private UserInfoMapper infoMapper;
-    @Autowired
     private DisserStuMapper duMapper;
     @Autowired
     private DissertationMapper dissertationMapper;
     @Autowired
     private UserMapper userMapper;
+
+    // 搜索
+    @Override
+    public RespVO search(String words) {
+        words = "%" + words + "%";
+        Page<DissertationVO> page = new Page<>(1, 20);
+        IPage<DissertationVO> vo = mapper.search(words, page);
+        return RespVO.ok("ok", vo);
+    }
 
     // 发布新的论文题目
     @Override
@@ -108,10 +120,18 @@ public class DissertationServiceImpl implements IDissertationService {
     }
 
     @Override
-    public RespVO disserList(int index, int size) {
-        // 查寻指定老师的题目
+    public RespVO myDissers(int index, int size) {
+        // 查寻当前老师出的题目
         Page<DissertationVO> page = new Page<>(index, size);
         IPage<DissertationVO> resPage = mapper.getMyDissertation(getUid(), page);
+        return RespVO.ok("查询成功", resPage);
+    }
+
+    @Override
+    public RespVO disserList(int index, int size) {
+        // 查寻所有论文题目
+        Page<DissertationVO> page = new Page<>(index, size);
+        IPage<DissertationVO> resPage = mapper.getDissers(page);
         return RespVO.ok("查询成功", resPage);
     }
 
@@ -129,16 +149,35 @@ public class DissertationServiceImpl implements IDissertationService {
 
 
     @Override
+    public RespVO abort(int did) {
+        int row = mapper.updateStatus(did);
+        int row2 = duMapper.deleteById(did);
+        if (row == 1 && row2 == 1) return RespVO.ok("ok");
+        return RespVO.error("error");
+    }
+
+    @Override
     public RespVO saveDisser(Integer did) {
+        int uid = getUid();
+        // 一个学生对应1个选题，先查一下有没有选
+        List<DisserStu> existDu = duMapper.isSelected(did, uid);
+        if (!existDu.isEmpty()) return RespVO.error("已选择过");
         DisserStu du = new DisserStu()
                 .setDid(did)
-                .setUid(getUid());
+                .setUid(uid);
         duMapper.insert(du);
         Dissertation dissertation = new Dissertation()
                 .setDid(did).setStatus(1);
         dissertationMapper.updateById(dissertation);
         return RespVO.ok("ok");
     }
+
+    @Override
+    public RespVO myAspiration() {
+        DissertationVO d = mapper.myAspiration(getUid());
+        return RespVO.ok("ok", d);
+    }
+
     public int getUid() {
         int uid = userMapper.getUid(UserUtil.getCurrentUser().getUsername());
         return uid;

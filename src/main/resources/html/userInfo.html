@@ -61,9 +61,9 @@
         if (role == '教师') {
             className.previousElementSibling.innerHTML = '职称'
             counselor.previousElementSibling.innerHTML = '指导学生'
-            user = 'teacher'
+            user = 't'
         }
-        axios.get(user+"/info")
+        axios.get("/info/"+user)
             .then(resp => {
                 let data = resp.data.data
                 name.value = data.userInfo.name

@@ -11,10 +11,17 @@ public interface IDissertationService {
 
     ResponseEntity download(String path) throws FileNotFoundException;
 
+    RespVO myDissers(int index, int size);
+
     RespVO disserList(int index, int size);
 
     RespVO delete(int did, String path) throws FileNotFoundException;
 
-    //    RespVO getOne(int uid);
     RespVO saveDisser(Integer did);
+
+    RespVO myAspiration();
+
+    RespVO abort(int did);
+
+    RespVO search(String words);
 }

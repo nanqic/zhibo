@@ -50,6 +50,11 @@ function init() {
                 major.innerHTML = data.major+"  "+data.className
             })
         const userRole = docCookies.getItem("userRole")
+        // 根据登录角色，显示相应模块
+        if (userRole=='学生'){
+            let myAspir = document.querySelector('#myAspir')
+            myAspir.className='nav-sub-menu'
+        }
         if (userRole=='教师'){
             let teacherCenter = document.querySelector('#teacher-center')
             teacherCenter.className='nav-menu'

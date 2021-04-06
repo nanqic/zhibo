@@ -33,7 +33,7 @@ public class TeacherController {
     @GetMapping("/{index}/{size}")
     RespVO myDissertation(@PathVariable("index") int index, @PathVariable("size") int size){
 
-        return service.disserList(index, size);
+        return service.myDissers(index, size);
     }
 
     // 删除题目

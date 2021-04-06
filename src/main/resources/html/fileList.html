@@ -2,59 +2,83 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
 </head>
 
 <body>
-  <div class="container">
-      <h5 class="text-center text-warning">资料列表</h5>
-      <table class="table">
-          <thead>
-          <tr>
-              <th scope="col">序号</th>
-              <th scope="col">资料名字</th>
-              <th scope="col">上传人</th>
-          </tr>
-          </thead>
-          <tbody class="tbody">
+<div class="container">
+    <h5 class="text-center text-warning">资料列表</h5>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">序号</th>
+            <th scope="col">资料名字</th>
+            <th scope="col">上传人</th>
+        </tr>
+        </thead>
+        <tbody class="tbody"></tbody>
+    </table>
+    <nav id="nav" class="d-none d-flex justify-content-center">
+        <a class="page-link" onclick="next()">加载更多</a>
+    </nav>
+</div>
+<script src="js/axios.min.js"></script>
+<script src="bootstrap/js/bootstrap.bundle.js"></script>
+<script src="js/docCookies.js"></script>
+<script>
+    let i = 1;
+    let totalPage = 1
+    loadData()
 
-          </tbody>
-      </table>
-    </div>
-          <script src="js/axios.min.js"></script>
-          <script src="bootstrap/js/bootstrap.bundle.js"></script>
-          <script src="js/docCookies.js"></script>
-        <script>
-            // create(1,2,3)
-            function create(id,path,up){
-                const tbody = document.querySelector('.tbody')
-                let tr = document.createElement('tr')
-                let td = document.createElement('td')
-                let a = document.createElement('a')
-                for (let j=1;j<=4;j++){
-                    tr.appendChild(td.cloneNode(true))
+    function create(id, path, up) {
+        const tbody = document.querySelector('.tbody')
+        let tr = document.createElement('tr')
+        let td = document.createElement('td')
+        let a = document.createElement('a')
+        for (let j = 1; j <= 4; j++) {
+            tr.appendChild(td.cloneNode(true))
+        }
+        tr.children[0].innerHTML = id
+        tr.children[1].appendChild(a)
+        tr.children[2].innerHTML = up
+        tr.children[1].className = 'text-info'
+        a.href = 'http://localhost/' + path
+        a.innerHTML = path
+        tbody.appendChild(tr)
+    }
+
+    function next() {
+        if (i < totalPage) {
+            i++
+            loadData()
+        }
+    }
+
+    function loadData() {
+        axios('/file/list/' + i)
+            .then(resp => {
+                    totalPage = resp.data.data.pages
+                let nav = document.querySelector('#nav')
+                let a = document.querySelector('.page-link')
+                if (totalPage>1){
+                    nav.className = 'd-flex justify-content-center'
                 }
-                tr.children[0].innerHTML = id
-                tr.children[1].appendChild(a)
-                tr.children[2].innerHTML = up
-                tr.children[1].className = 'text-info'
-                a.href = 'http://localhost/'+path
-                a.innerHTML = path
-                tbody.appendChild(tr)
-            }
-            let i = 1
-            axios('/file/list/'+i)
-            .then( resp =>{
-                let data = resp.data.data
-                data.records.forEach(col => {
-                    create(col.id,"docs/"+col.path,col.uploader)
-                })
+                if (i==totalPage){
+                    nav.removeChild(a)
+                    nav.innerHTML = '已加载全部'
+                }
+                    let data = resp.data.data
+                    data.records.forEach(col => {
+                        create(col.id, "docs/" + col.path, col.uploader)
+                    })
                 }
             )
-        </script>
+    }
+
+</script>
 
 </body>
 

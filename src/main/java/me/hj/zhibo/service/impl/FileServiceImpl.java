@@ -63,7 +63,7 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public RespVO fileList(int index) {
-        IPage<FileListVO> resPage = mapper.selectFileList(new Page<FileListVO>(index, 10));
+        IPage<FileListVO> resPage = mapper.selectFileList(new Page<FileListVO>(index, 5));
 
         return RespVO.ok("ok", resPage);
     }

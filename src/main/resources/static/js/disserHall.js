@@ -1,14 +1,23 @@
 initData()
+let currentPage=1;
+let totalPage;
+// 搜索题目
+function search(){
+    const words = document.querySelector('#words').value
+    axios('/search?words='+words)
+        .then(resp => {
+            resetNodes(resp);
+            let nav = document.querySelector('#nav')
+            nav.parentNode.removeChild(nav)
+        })
+}
 
 // 创建表格
-function create(did, teacher, name, count, status, path) {
+function create(did, teacher, name, status, path) {
     const tbody = document.querySelector('.tbody')
     const tr = document.createElement('tr')
     let td = document.createElement("td");
-    let span = document.createElement('span')
-    span.className = 'text-danger'
-    span.innerHTML = count + '人'
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 4; i++) {
         tr.appendChild(td.cloneNode(true))
     }
     tr.firstChild.innerHTML = did
@@ -17,54 +26,74 @@ function create(did, teacher, name, count, status, path) {
     tr.children[2].innerHTML = name
     // 监听点击
     tr.children[1].onclick = () => teacherInfo(teacher)
-    tr.children[2].onclick = () => showOnline(did, name, path)
+    tr.children[2].onclick = () => showOnline(did, name, path, status)
     tr.children[2].className = 'link-primary'
-    tr.children[3].appendChild(span)
-    tr.children[4].innerHTML = status
+    tr.children[3].innerHTML = status
+    tr.children[3].className = 'text-success'
     tbody.appendChild(tr)
 }
 
 // 加载数据
 function initData(i = 1) {
-    axios.get('/disser/list/' + i + '/10')
+    const userRole = docCookies.getItem("userRole")
+    // 根据登录角色，显示相应模块
+    if (userRole == '学生') {
+        let btn = document.querySelector('#submit')
+        btn.className = 'btn btn-success'
+    }
+    axios.get('/dissers/' + i + '/2')
         .then(resp => {
             let data = resp.data.data
+            totalPage = resp.data.data.pages;
             createTable(data);
             //生成翻页下标
             for (let p = 1; p <= data.pages; p++) {
                 initPageList(p)
             }
+            const nextPage = document.getElementById('next-page')
+            nextPage.onclick = () => toNextPage(currentPage, totalPage)
+            const pages = document.querySelectorAll('.page-item')
+            pages[1].classList.add('active')
         })
 }
 
 // 创建表格
 function createTable(data) {
     data.records.forEach((col) => {
-        let s = '进行中';
+        let s = '待选择';
         col.status == 0 ? s = s : s = '已完成'
-        create(col.did, col.teacher, col.name, col.count, s, col.path)
+        create(col.did, col.teacher, col.name, s, col.path)
+
     })
 }
 
 // 在线预览题目
-function showOnline(did, name, path) {
+function showOnline(did, name, path, status) {
+    // console.log(status)
+    let btn = document.querySelector('#submit')
+    if (status == '已完成') {
+        btn.className = 'btn btn-success d-none'
+    }else {
+        btn.className = 'btn btn-success'
+    }
     let modalLabel = document.querySelector('#exampleModalLabel')
     let obj = document.querySelector('object')
     modalLabel.innerHTML = name
     obj.data = 'http://localhost/' + path
     let submitAsp = document.querySelector('#submit')
     submitAsp.onclick = () => {
-        // 读取cookie信息
-        let userInfo = docCookies.getItem('user')
-        let uid = JSON.parse(userInfo).uid
-        // console.log(did,uid)
         let data = new FormData()
         data.append("did", did)
-        data.append("uid", uid)
-        axios.post("/disser/submit", data)
-            .then(() => {
-                alert("志愿选择成功！")
+        axios.post("/student/save", data)
+            .then((resp) => {
+                if (resp.data.status == 200) {
+                    alert("志愿选择成功！")
+                }else {
+                    alert("志愿已选过！")
+                }
+
             })
+            .then(() => location.reload())
     }
     let myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
         keyboard: false
@@ -80,7 +109,7 @@ function teacherInfo(teacherName) {
     const phone = document.querySelector('#phone')
     const jobTitle = document.querySelector('#job-title')
     const degree = document.querySelector('#degree')
-    axios.get("/user/teacherInfo/" + teacherName)
+    axios.get("/info/" + teacherName)
         .then(resp => {
             // console.log(resp);
             let data = resp.data.data
@@ -88,8 +117,8 @@ function teacherInfo(teacherName) {
             dept.value = data.dept
             major.value = data.major
             phone.value = data.phone
-            jobTitle.value = data.zhicheng
-            degree.value = data.degree
+            jobTitle.value = data.className
+            degree.value = data.graduation
         })
 
     let t = new bootstrap.Modal(document.getElementById('teacherModal'))
@@ -118,32 +147,35 @@ function initPageList(i) {
     }
 }
 
+function resetNodes(resp){
+    let data = resp.data.data
+    // 移除旧的节点
+    const table = document.querySelector('.table')
+    const tbody = document.querySelector('.tbody')
+    if (tbody != undefined) {
+        table.removeChild(tbody)
+    }
+    // 生成新的节点
+    const body = document.createElement('tbody')
+    body.className = 'tbody'
+    table.appendChild(body)
+    createTable(data)
+    // 监听上下翻页
+    currentPage = data.current;
+    totalPage = data.pages;
+
+    const prevPage = document.getElementById('prev-page')
+    const nextPage = document.getElementById('next-page')
+    currentPage == 1 ? prevPage.className = ('page-item disabled') : prevPage.className = ('page-item')
+    currentPage == totalPage ? nextPage.classList.add('disabled') : nextPage.className = ('page-item')
+    nextPage.onclick = () => toNextPage(currentPage, totalPage)
+    prevPage.onclick = () => toPrevPage(currentPage)
+}
 // 刷新卡片数据
 function reloadData(i) {
-    axios.get("/disser/list/" + i + "/10")
+    axios.get("/dissers/" + i + "/2")
         .then(resp => {
-            let data = resp.data.data
-            // 移除旧的节点
-            const table = document.querySelector('.table')
-            const tbody = document.querySelector('.tbody')
-            if (tbody != undefined) {
-                table.removeChild(tbody)
-            }
-            // 生成新的节点
-            const body = document.createElement('tbody')
-            body.className = 'tbody'
-            table.appendChild(body)
-            createTable(data)
-            // 监听上下翻页
-            currentPage = data.current;
-            totalPage = data.pages;
-
-            const prevPage = document.getElementById('prev-page')
-            const nextPage = document.getElementById('next-page')
-            currentPage == 1 ? prevPage.className = ('page-item disabled') : prevPage.className = ('page-item')
-            currentPage == totalPage ? nextPage.classList.add('disabled') : nextPage.className = ('page-item')
-            nextPage.onclick = () => toNextPage(currentPage, totalPage)
-            prevPage.onclick = () => toPrevPage(currentPage)
+            resetNodes(resp)
         })
 }
 
