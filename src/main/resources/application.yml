@@ -14,7 +14,7 @@ spring:
     static-path-pattern: /**
   web:
     resources:
-      static-locations: classpath:upload/,classpath:static/,classpath:html/
+      static-locations: classpath:static/,classpath:html/
 
 mybatis-plus:
   configuration:

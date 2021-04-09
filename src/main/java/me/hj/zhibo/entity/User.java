@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @param
+ * 用户表
  */
 @Data
 @AllArgsConstructor

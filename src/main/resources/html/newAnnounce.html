@@ -10,11 +10,12 @@
     <form>
         <div class="mb-3">
             <label for="title" class="form-label">标题</label>
-            <input type="text" required class="form-control" id="title">
+            <input type="text" required class="form-control" id="title" maxlength="60">
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">内容</label>
-            <input type="text" required class="form-control" id="content">
+            <textarea class="form-control" id="content" rows="3" maxlength="255"></textarea>
+
         </div>
         <button type="button" onclick="newAnno()" class="btn btn-primary"> 发布通知</button>
     </form>

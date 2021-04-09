@@ -54,29 +54,52 @@ function doLogin() {
         .then(resp => {
             let loginInfo = document.querySelector('#login-info')
             loginInfo.innerHTML = ""
-            // console.log(resp);
+            // console.log(resp.data);
             if (resp.data == 'error') {
 
                 loginInfo.style.color = 'red'
                 loginInfo.innerHTML = "登录失败，用户名或密码错误"
 
             } else {
-                loginInfo.style.color = "#0dcaf0"
-                loginInfo.innerHTML = "登录成功！ " + "2秒后自动跳转到首页"
-                // 登录成功后跳转到首页
-                refresh()
+                axios.get("/user/loginRes")
+                    .then(resp => {
+                        const data = resp.data.data
+                        let userInfo = {
+                            name: data.name,
+                            role: data.roleName,
+                            dept: data.dept,
+                            major: data.major,
+                        }
+                        if (data.roleName == '学生') {
+                            userInfo.className = data.className
+                            userInfo.graduation = data.graduation
+                        } else {
+                            userInfo.jobTitle = data.jobTitle
+                            userInfo.degree = data.degree
+                        }
 
-                async function refresh() {
-                    await new Promise(() => {
-                        setTimeout(() => {
-                            window.location.replace('http://localhost')
-                        }, 2000)
-                    })
-                }
+
+                        // console.log(userInfo)
+                        userInfo = encodeURI(JSON.stringify(userInfo))
+                        // 保存数据到 sessionStorage
+                        sessionStorage.setItem('userInfo', userInfo);
+                    }).then(() => {
+                    loginInfo.style.color = "#0dcaf0"
+                    loginInfo.innerHTML = "登录成功！ " + "2秒后自动跳转到首页"
+                    // 登录成功后跳转到首页
+                    refresh()
+                    async function refresh() {
+                        await new Promise(() => {
+                            setTimeout(() => {
+                                window.location.replace('http://localhost')
+                            }, 2000)
+                        })
+                    }
+                })
+
             }
         })
 }
 
 let loginModal = new bootstrap.Modal(document.querySelector('#loginModal'))
-
 loginModal.show()

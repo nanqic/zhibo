@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AnnounceMapper extends BaseMapper<Announce> {
-    @Select("select a.title, a.content, a.update_time, i.name from tb_announce a left join tb_user_info i on a.uid=i.uid")
+    @Select("select a.title, a.content, a.update_time, i.name from tb_announce a left join tb_teacher_info i on a.uid=i.uid ORDER BY a.aid desc")
     IPage<AnnounceVO> getList(Page<AnnounceVO> page);
 
 }

@@ -45,7 +45,8 @@
 <script src="js/axios.min.js"></script>
 <script>
     // 读取cookie信息
-    const role = docCookies.getItem('userRole')
+    const userInfo = sessionStorage.getItem('userInfo')
+    const role = JSON.parse(decodeURI(userInfo)).role
     if (role != null) {
         init()
     }
@@ -66,11 +67,11 @@
         axios.get("/info/"+user)
             .then(resp => {
                 let data = resp.data.data
-                name.value = data.userInfo.name
-                dept.value = data.userInfo.dept
-                major.value = data.userInfo.major
-                phone.value = data.userInfo.phone
-                className.value = data.userInfo.className
+                name.value = data.view.name
+                dept.value = data.view.dept
+                major.value = data.view.major
+                phone.value = data.view.phone
+                className.value = data.view.className
                 counselor.value = data.counselor
             })
     }

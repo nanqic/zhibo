@@ -2,6 +2,7 @@ package me.hj.zhibo.service.impl;
 
 
 import me.hj.zhibo.service.IUserService;
+import me.hj.zhibo.vo.AddStudentVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +33,7 @@ class UserServiceImplTest {
 
     @Test
     void tests(){
-//        System.out.println(userService.userList(1, 3));
+
     }
 
 

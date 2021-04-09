@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加教师</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
+</head>
+<body>
+<script src="js/axios.min.js" type="text/javascript"></script>
+<script src="bootstrap/js/bootstrap.bundle.js" type="text/javascript"></script>
+<div class="container">
+    <form class="row mt-5">
+        <div class="input-group mb-3">
+            <label for="name" class="form-label">姓名：</label>
+            <input id="name" type="text" class="form-control" placeholder="请输入教师姓名" required maxlength="8">
+        </div>
+        <div class="input-group mb-3">
+            <label for="username" class="form-label">工号：</label>
+            <input id="username" type="text" class="form-control" placeholder="请输入教师工号" required maxlength="12">
+        </div>
+        <div class="input-group mb-3">
+            <label for="phone" class="form-label">手机：</label>
+            <input id="phone" type="tel" class="form-control" placeholder="请输入教师手机号" required maxlength="11">
+        </div>
+        <div class="input-group mb-3">
+            <label for="dept" class="form-label">系部：</label>
+            <select class="form-select" id="dept">
+                <option selected>请选择教师系部...</option>
+                <option value="1">人工智能学院</option>
+                <option value="2">信息技术系</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label for="major" class="form-label">指导专业：</label>
+            <select class="form-select" id="major">
+                <option selected>请选择教师指导专业...</option>
+                <option value="1">计算机科学与技术</option>
+                <option value="2">软件工程</option>
+                <option value="3">计算机网络</option>
+                <option value="3">计算机应用</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label for="job-title" class="form-label">职称：</label>
+            <input id="job-title" type="text" class="form-control" placeholder="请输入教师职称" required maxlength="8">
+        </div>
+        <div class="input-group mb-3">
+            <label for="degree" class="form-label">学位：</label>
+            <input id="degree" type="text" class="form-control" placeholder="请输入教师学位" required maxlength="8">
+        </div>
+        <div class="d-flex justify-content-lg-center">
+            <button type="button" class="btn btn-primary mb-3" onclick="doSubmit()">确认提交</button>
+        </div>
+        <script>
+            function doSubmit() {
+                let data = {
+                    username: document.getElementById('username').value,
+                    teacherInfo: {
+                        name: document.getElementById('name').value,
+                        phone: document.getElementById('phone').value,
+                        deptId: document.getElementById('dept').value,
+                        majorId: document.getElementById('major').value,
+                        jobTitle: document.getElementById('job-title').value,
+                        degree: document.getElementById('degree').value,
+                    }
+                }
+                // console.log(data)
+                axios({
+                    method: 'post',
+                    url: '/admin/t',
+                    data: data
+                })
+                    .then(resp => {
+                        if (resp.data.msg == 'ok') {
+                            alert('添加教师成功！')
+                        }
+                    })
+                    .then(() => location.replace('userList.html'))
+            }
+
+        </script>
+    </form>
+</div>
+</body>
+</html>

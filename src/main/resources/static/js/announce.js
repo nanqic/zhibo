@@ -62,6 +62,10 @@ function initData() {
     axios.get("/anno/page/1/3")
         .then(resp => {
             data = resp.data.data
+            if (data.pages<=1){
+                const nav = document.querySelector('#nav')
+                nav.className = 'd-none'
+            }
             // 生成信息卡片
             data.records.forEach(r => {
                 // 格式化后端传来的时间

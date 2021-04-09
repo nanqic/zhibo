@@ -31,6 +31,7 @@
                                     <input type="text" class="form-control" id="login-account"
                                            autocomplete="username" name="username"
                                            pattern="[0-9,a-z]{5,12}"
+                                           autofocus
                                            required/>
                                     <div class="invalid-feedback">
                                         请输入你的学号或教职工号
@@ -77,7 +78,7 @@
                                   action="/register">
                                 <div class="mb-3">
                                     <label for="reg-name" class="col-form-label">姓名：</label>
-                                    <input type="text" class="form-control" id="reg-name" required
+                                    <input type="text" class="form-control" id="reg-name" autofocus='autofocus' required
                                            pattern="[\u4e00-\u9fa5]{1,4}"/>
                                     <div class="invalid-feedback">
                                         请输入你的真实姓名

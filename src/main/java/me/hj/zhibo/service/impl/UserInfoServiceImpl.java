@@ -2,9 +2,12 @@ package me.hj.zhibo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import me.hj.zhibo.entity.Counselor;
-import me.hj.zhibo.entity.UserInfo;
+import me.hj.zhibo.entity.TeacherInfoView;
+import me.hj.zhibo.entity.StudentInfo;
+import me.hj.zhibo.entity.StudentInfoView;
 import me.hj.zhibo.mapper.CounselorMapper;
-import me.hj.zhibo.mapper.UserInfoMapper;
+import me.hj.zhibo.mapper.TeacherInfoMapper;
+import me.hj.zhibo.mapper.StudentInfoMapper;
 import me.hj.zhibo.mapper.UserMapper;
 import me.hj.zhibo.service.IUserInofService;
 import me.hj.zhibo.utils.UserUtil;
@@ -18,26 +21,28 @@ import java.util.List;
 @Service
 public class UserInfoServiceImpl implements IUserInofService {
     @Autowired
-    UserInfoMapper infoMapper;
+    StudentInfoMapper infoMapper;
     @Autowired
     CounselorMapper counMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    TeacherInfoMapper teacherInfoMapper;
 
     @Override
     public RespVO getStudentInfo() {
         int uid = getUid();
-        UserInfo info = infoMapper.selectById(uid);
+        StudentInfoView info = infoMapper.getUserInfoViewById(uid);
         // 查询对应老师
         int teacUid = counMapper.selectById(uid).getTeachUid();
         // 查询老师名字
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.select("name").eq("uid", teacUid);
-        String teacherName = infoMapper.selectOne(wrapper).getName();
+        String teacherName = teacherInfoMapper.selectOne(wrapper).getName();
 
         // 查询详细信息
         UserInfoVO vo = new UserInfoVO();
-        vo.setUserInfo(info);
+        vo.setView(info);
         vo.setCounselor(new String[]{teacherName});
 
         return RespVO.ok("查询成功！", vo);
@@ -53,19 +58,19 @@ public class UserInfoServiceImpl implements IUserInofService {
         List<Counselor> counselors = counMapper.selectList(wrapper1);
 
         // 查询所有学生名字
-        QueryWrapper<UserInfo> wrapper2 = new QueryWrapper<UserInfo>();
+        QueryWrapper<StudentInfo> wrapper2 = new QueryWrapper<StudentInfo>();
         wrapper2.select("name");
         counselors.forEach(counselor -> wrapper2.eq("uid", counselor.getStuUid()).or());
-        List<UserInfo> infos = infoMapper.selectList(wrapper2);
+        List<StudentInfo> infos = infoMapper.selectList(wrapper2);
         String[] stusName = new String[infos.size()];
         for (int i = 0; i <= infos.size() - 1; i++) {
             stusName[i] = infos.get(i).getName();
         }
 
         // 查询老师详细信息
-        UserInfo info = infoMapper.selectById(uid);
+        TeacherInfoView view = teacherInfoMapper.getTeacherInfoViewById(uid);
         UserInfoVO vo = new UserInfoVO();
-        vo.setUserInfo(info);
+        vo.setView(view);
         // 被指导的学生列表
         vo.setCounselor(stusName);
         return RespVO.ok("查询成功！", vo);
@@ -73,13 +78,11 @@ public class UserInfoServiceImpl implements IUserInofService {
 
     @Override
     public RespVO getInfoByName(String name) {
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("name", name);
-        UserInfo info = infoMapper.selectOne(wrapper);
-        return RespVO.ok("ok", info);
+        TeacherInfoView view = teacherInfoMapper.getTeacherInfoViewByName(name);
+        return RespVO.ok("ok", view);
     }
 
-    public int getUid() {
+    private int getUid() {
         int uid = userMapper.getUid(UserUtil.getCurrentUser().getUsername());
         return uid;
     }

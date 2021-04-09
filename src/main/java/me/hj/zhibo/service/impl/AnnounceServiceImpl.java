@@ -37,7 +37,7 @@ public class AnnounceServiceImpl implements IAnnounceService {
 
         return RespVO.ok("发布成功！");
     }
-    public int getUid() {
+    private int getUid() {
         int uid = userMapper.getUid(UserUtil.getCurrentUser().getUsername());
         return uid;
     }

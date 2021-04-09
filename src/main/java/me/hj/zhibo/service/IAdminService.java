@@ -1,5 +1,7 @@
 package me.hj.zhibo.service;
 
+import me.hj.zhibo.vo.AddStudentVO;
+import me.hj.zhibo.vo.AddTeacherVO;
 import me.hj.zhibo.vo.RespVO;
 
 public interface IAdminService {
@@ -8,5 +10,8 @@ public interface IAdminService {
     RespVO deleteUser(String username);
     RespVO disableUser(String username);
     RespVO enableUser(String username);
+    RespVO addTeacher(AddTeacherVO vo);
+    RespVO addStudent(AddStudentVO vo);
+    RespVO getTeachers();
 
 }

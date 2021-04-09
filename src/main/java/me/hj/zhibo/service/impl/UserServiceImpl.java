@@ -62,9 +62,26 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public RespVO getLoginResults(String username) {
-        LoginResultsVO vo = userMapper.getLoginResults(username);
-        return RespVO.ok("ok", vo);
+    public RespVO getLoginResults() {
+        int roleId = getRole();
+        String username = UserUtil.getCurrentUser().getUsername();
+        switch (roleId) {
+            case 1:
+                TeLoginResultsVO vo = userMapper.getTeLoginResults(username);
+                return RespVO.ok("ok", vo);
+            case 2:
+                StuLoginResultsVO vo2 = userMapper.getStuLoginResults(username);
+                return RespVO.ok("ok", vo2);
+            case 0:
+                StuLoginResultsVO vo3 = new StuLoginResultsVO();
+                vo3.setRoleName("管理员");
+                return RespVO.ok("ok", vo3);
+        }
+        return RespVO.error("error");
     }
 
+    private int getRole() {
+        int uid = userMapper.getRole(UserUtil.getCurrentUser().getUsername());
+        return uid;
+    }
 }

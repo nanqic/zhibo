@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FileMapper extends BaseMapper<FileEntity> {
-    @Select("select f.id,f.path, i.name as uploader from tb_file f left join tb_user_info i on f.uid=i.uid")
+    @Select("select f.id,f.path, i.name as uploader from tb_file f left join v_user_info i on f.uid=i.uid")
     IPage<FileListVO> selectFileList(Page<FileListVO> page);
 }

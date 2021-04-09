@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新增题目</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
 <script src="bootstrap/js/bootstrap.bundle.js"></script>
 <script src="js/axios.min.js"></script>
 <script>
-    function save(){
+    function save() {
         let name = document.querySelector('#disserName').value
         let file = document.querySelector('#formFile')
 
@@ -40,11 +40,11 @@
         let formData = new FormData()
         formData.append("file", file.files[0]);
         formData.append("name", name)
-        axios.post("/teacher/disser",formData)
-        alert("上传成功！")
-        // 跳转到列表页
-        let disser = window.parent.document.querySelector('.disser-list')
-        disser.click()
+        axios.post("/teacher/disser", formData)
+            .then(() => alert("上传成功！"))
+            // 跳转到列表页
+            .then(() => location.replace('disserHall.html'))
+
 
     }
 </script>

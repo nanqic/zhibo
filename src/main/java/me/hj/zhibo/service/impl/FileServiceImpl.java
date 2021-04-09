@@ -68,7 +68,7 @@ public class FileServiceImpl implements IFileService {
         return RespVO.ok("ok", resPage);
     }
 
-    public int getUid() {
+    private int getUid() {
         int uid = userMapper.getUid(UserUtil.getCurrentUser().getUsername());
         return uid;
     }

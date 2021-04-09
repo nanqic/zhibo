@@ -12,7 +12,9 @@ function search(){
         })
 }
 
-// 创建表格
+/*
+ 创建表格节点
+ */
 function create(did, teacher, name, status, path) {
     const tbody = document.querySelector('.tbody')
     const tr = document.createElement('tr')
@@ -33,19 +35,19 @@ function create(did, teacher, name, status, path) {
     tbody.appendChild(tr)
 }
 
-// 加载数据
+/*
+ 初始化数据，先请求第一页数据，再根据页数生成翻页下标
+ */
 function initData(i = 1) {
-    const userRole = docCookies.getItem("userRole")
-    // 根据登录角色，显示相应模块
-    if (userRole == '学生') {
-        let btn = document.querySelector('#submit')
-        btn.className = 'btn btn-success'
-    }
-    axios.get('/dissers/' + i + '/2')
+    axios.get('/dissers/' + i + '/5')
         .then(resp => {
             let data = resp.data.data
             totalPage = resp.data.data.pages;
             createTable(data);
+            if (totalPage<=1){
+                const nav = document.querySelector('#nav')
+                nav.className = 'd-none'
+            }
             //生成翻页下标
             for (let p = 1; p <= data.pages; p++) {
                 initPageList(p)
@@ -71,15 +73,20 @@ function createTable(data) {
 function showOnline(did, name, path, status) {
     // console.log(status)
     let btn = document.querySelector('#submit')
-    if (status == '已完成') {
-        btn.className = 'btn btn-success d-none'
-    }else {
+    const userInfo = sessionStorage.getItem('userInfo')
+    const data = JSON.parse(decodeURI(userInfo))
+    const userRole = data.role
+    // 根据登录角色，显示相应模块
+    if (userRole == '学生' && status == '待选择') {
+        let btn = document.querySelector('#submit')
         btn.className = 'btn btn-success'
+    }else {
+        btn.className = 'd-none'
     }
     let modalLabel = document.querySelector('#exampleModalLabel')
     let obj = document.querySelector('object')
     modalLabel.innerHTML = name
-    obj.data = 'http://localhost/' + path
+    obj.data = 'http://localhost/upload/' + path
     let submitAsp = document.querySelector('#submit')
     submitAsp.onclick = () => {
         let data = new FormData()
@@ -117,8 +124,8 @@ function teacherInfo(teacherName) {
             dept.value = data.dept
             major.value = data.major
             phone.value = data.phone
-            jobTitle.value = data.className
-            degree.value = data.graduation
+            jobTitle.value = data.jobTitle
+            degree.value = data.degree
         })
 
     let t = new bootstrap.Modal(document.getElementById('teacherModal'))
@@ -171,9 +178,11 @@ function resetNodes(resp){
     nextPage.onclick = () => toNextPage(currentPage, totalPage)
     prevPage.onclick = () => toPrevPage(currentPage)
 }
-// 刷新卡片数据
+/*
+ 刷新卡片数据，5为默认每页显示条数
+ */
 function reloadData(i) {
-    axios.get("/dissers/" + i + "/2")
+    axios.get("/dissers/" + i + "/5")
         .then(resp => {
             resetNodes(resp)
         })

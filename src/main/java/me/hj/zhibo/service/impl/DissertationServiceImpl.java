@@ -1,13 +1,11 @@
 package me.hj.zhibo.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.hj.zhibo.entity.DisserStu;
 import me.hj.zhibo.entity.Dissertation;
 import me.hj.zhibo.mapper.DisserStuMapper;
 import me.hj.zhibo.mapper.DissertationMapper;
-import me.hj.zhibo.mapper.UserInfoMapper;
 import me.hj.zhibo.mapper.UserMapper;
 import me.hj.zhibo.service.IDissertationService;
 import me.hj.zhibo.utils.UserUtil;
@@ -26,7 +24,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Wrapper;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -178,7 +175,7 @@ public class DissertationServiceImpl implements IDissertationService {
         return RespVO.ok("ok", d);
     }
 
-    public int getUid() {
+    private int getUid() {
         int uid = userMapper.getUid(UserUtil.getCurrentUser().getUsername());
         return uid;
     }

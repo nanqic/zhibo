@@ -5,16 +5,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-@Data
 @Accessors(chain = true)
-public class UserInfo {
-    @TableId(type = IdType.AUTO)
-    private Integer id;
+@Data
+public class TeacherInfo {
+    @TableId(type = IdType.INPUT)
     private Integer uid;
     private String name;
-    private String dept;
-    private String major;
+    private byte deptId;
+    private byte majorId;
     private String phone;
-    private String className;
-    private String graduation;
+    private String jobTitle;
+    private String degree;
 }

@@ -1,11 +1,9 @@
 package me.hj.zhibo.service;
 
-import me.hj.zhibo.vo.UpdatePasswordVO;
-import me.hj.zhibo.vo.RespVO;
-import me.hj.zhibo.vo.UserRegisterVO;
+import me.hj.zhibo.vo.*;
 
 public interface IUserService {
     RespVO register(UserRegisterVO vo);
     RespVO updatePasswd(UpdatePasswordVO vo);
-    RespVO getLoginResults(String username);
+    RespVO getLoginResults();
 }
