@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css"/>
 </head>
 
 <body>
@@ -22,17 +22,15 @@
         <tbody class="tbody"></tbody>
     </table>
     <nav id="nav" class="d-none d-flex justify-content-center">
-        <a class="page-link" onclick="next()">加载更多</a>
+        <a class="page-link" onclick="loadData()">加载更多...</a>
     </nav>
 </div>
-<script src="js/axios.min.js"></script>
-<script src="bootstrap/js/bootstrap.bundle.js"></script>
-<script src="js/docCookies.js"></script>
+<script src="/js/axios.min.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.js"></script>
 <script>
     let i = 1;
     let totalPage = 1
     loadData()
-
     function create(id, path, up) {
         const tbody = document.querySelector('.tbody')
         let tr = document.createElement('tr')
@@ -50,30 +48,26 @@
         tbody.appendChild(tr)
     }
 
-    function next() {
-        if (i < totalPage) {
-            i++
-            loadData()
-        }
-    }
 
     function loadData() {
+        if (i >= 1 && i < totalPage) ++i
         axios('/file/list/' + i)
             .then(resp => {
-                    totalPage = resp.data.data.pages
-                let nav = document.querySelector('#nav')
-                let a = document.querySelector('.page-link')
-                if (totalPage>1){
-                    nav.className = 'd-flex justify-content-center'
-                }
-                if (i==totalPage){
-                    nav.removeChild(a)
-                    nav.innerHTML = '已加载全部'
-                }
+
                     let data = resp.data.data
+                    totalPage = data.pages
                     data.records.forEach(col => {
                         create(col.id, "docs/" + col.path, col.uploader)
                     })
+                    let nav = document.querySelector('#nav')
+                    let a = document.querySelector('.page-link')
+                    if (totalPage > 1) {
+                        nav.className = 'd-flex justify-content-center'
+                    }
+                    if (i == totalPage) {
+                        nav.removeChild(a)
+                        nav.innerHTML = '已加载全部'
+                    }
                 }
             )
     }

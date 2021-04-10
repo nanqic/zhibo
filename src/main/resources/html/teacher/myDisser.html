@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题目列表</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
+</head>
+
+<body>
+    <div class="container">
+        <!--    题目列表-->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">课题Id</th>
+                    <th scope="col">课题名字</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+            </tbody>
+        </table>
+        <nav id="nav" class="d-none d-flex justify-content-center">
+            <a class="page-link" onclick="loadData()">加载更多...</a>
+        </nav>
+    </div>
+    <script src="/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <script src="/js/myDisser.js">
+
+    </script>
+</body>
+
+</html>

@@ -1,4 +1,6 @@
-initData()
+let i = 1;
+let totalPage = 1
+loadData()
 
 // 创建表格节点
 function create(did, name, path) {
@@ -27,21 +29,37 @@ function create(did, name, path) {
     tr.appendChild(td3)
     tbody.appendChild(tr)
     // 监听下载按钮
-    btn0.onclick = () => download(name,path)
+    btn0.onclick = () => download(name, path)
     // 监听删除按钮
     btn.onclick = () => deleteDisser(did, path)
 }
 
-// 创建表格
-function createTable(data) {
-    data.records.forEach((col) => {
-        create(col.did, col.name, col.path)
-    })
+// 获取数据
+function loadData() {
+    if (i >= 1 && i < totalPage) ++i
+    axios.get('/teacher/' + i + '/3')
+        .then(resp => {
+            let data = resp.data.data
+            data.records.forEach((col) => {
+                create(col.did, col.name, col.path)
+            })
+            totalPage = data.pages
+            const nav = document.querySelector('#nav')
+            const a = document.querySelector('.page-link')
+
+            if (totalPage > 1) {
+                nav.className = 'd-flex justify-content-center'
+            }
+            if (i == totalPage) {
+                nav.removeChild(a)
+                nav.innerHTML = '已加载全部'
+            }
+        })
 }
 
 // 下载题目文档
-function download(name,path) {
-    axios.get("/file/disser?path="+path, {
+function download(name, path) {
+    axios.get("/file/disser?path=" + path, {
         responseType: 'blob'
     })
         .then(res => {
@@ -64,105 +82,16 @@ function download(name,path) {
 // 删除题目
 function deleteDisser(did, path) {
     let params = new FormData()
-    params.append("did",did)
-    params.append("path",path)
+    params.append("did", did)
+    params.append("path", path)
     if (confirm("确认删除Id为" + did + "的课题吗？")) {
-        axios.delete("/teacher/", {data:params})
+        axios.delete("/teacher/", {data: params})
             .then(resp => {
                 if (resp.status === 200) {
                     window.location.reload()
                 }
             })
     }
-}
-
-// 获取数据
-function initData() {
-    axios.get('/teacher/1/7')
-        .then(resp => {
-            let data = resp.data.data
-            // console.log(data);
-            data.records.forEach((col) => {
-                create(col.did, col.name, col.path)
-            })
-            //生成翻页下标
-            for (let p = 1; p <= data.pages; p++) {
-                initPageList(p)
-            }
-        })
-}
-
-// 初始化翻页下标
-function initPageList(i) {
-    const pageList = document.querySelector("#page-list")
-    const next = document.querySelector("#next-page")
-    const li = document.createElement('li')
-    const a = document.createElement('a')
-    li.className = 'page-item'
-    a.className = 'page-link'
-    a.innerHTML = i
-    li.appendChild(a)
-    pageList.insertBefore(li, next)
-
-    // 添加监听点击事件
-    a.onclick = () => {
-        reloadData(i)
-        // 重置激活按钮
-        resetActive()
-        li.classList.add('active')
-    }
-}
-
-// 刷新卡片数据
-function reloadData(i) {
-    axios.get("/disser/list/" + i + "/7")
-        .then(resp => {
-            let data = resp.data.data
-            // 移除旧的节点
-            const table = document.querySelector('.table')
-            const tbody = document.querySelector('.tbody')
-            if (tbody != undefined) {
-                table.removeChild(tbody)
-            }
-            // 生成新的节点
-            const body = document.createElement('tbody')
-            body.className = 'tbody'
-            table.appendChild(body)
-            createTable(data)
-            // 监听上下翻页
-            currentPage = data.current;
-            totalPage = data.pages;
-
-            const prevPage = document.getElementById('prev-page')
-            const nextPage = document.getElementById('next-page')
-            currentPage == 1 ? prevPage.className = ('page-item disabled') : prevPage.className = ('page-item')
-            currentPage == totalPage ? nextPage.classList.add('disabled') : nextPage.className = ('page-item')
-            nextPage.onclick = () => toNextPage(currentPage, totalPage)
-            prevPage.onclick = () => toPrevPage(currentPage)
-        })
-}
-
-function toNextPage(currentPage, totalPage) {
-    const pages = document.querySelectorAll('.page-item')
-    if (currentPage < totalPage) reloadData(++currentPage)
-    resetActive()
-    pages[currentPage].classList.add('active')
-
-}
-
-function toPrevPage(currentPage) {
-    const pages = document.querySelectorAll('.page-item')
-    if (currentPage > 1) {
-        reloadData(--currentPage)
-        resetActive()
-        pages[currentPage].classList.add('active')
-    }
-}
-
-// 重置激活按钮
-function resetActive() {
-    let actived = document.querySelector('.active')
-    if (actived != null) actived.classList.remove('active')
 }
 
 //  模拟点击a 标签进行下载

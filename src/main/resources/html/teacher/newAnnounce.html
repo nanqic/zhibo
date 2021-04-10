@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>新通告</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css"/>
 </head>
 <body>
 <div class="container">
@@ -21,26 +21,24 @@
     </form>
 
 </div>
-<script src="js/axios.min.js"></script>
+<script src="/js/axios.min.js"></script>
 <script>
-    function newAnno(){
+    function newAnno() {
         let title = document.getElementById('title')
         let content = document.getElementById('content')
-        axios.post("/teacher/anno",{
-            title:title.value,
-            content:content.value
+        axios.post("/teacher/anno", {
+            title: title.value,
+            content: content.value
         })
-        .then(resp=>{
-            if (resp.data.status==200){
-                alert("发布成功！")
-                title.value = ''
-                content.value=''
-            }
-        })
+            .then(resp => {
+                if (resp.data.status == 200) {
+                    alert("发布成功！")
+                    title.value = ''
+                    content.value = ''
+                }
+            })
     }
 </script>
-<script src="bootstrap/js/bootstrap.bundle.js"></script>
-<script src="js/docCookies.js"></script>
-
+<script src="/bootstrap/js/bootstrap.bundle.js"></script>
 </body>
 </html>

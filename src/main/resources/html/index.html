@@ -56,7 +56,7 @@
                             class="bi bi-info-square"></i>
                         <span>最新通知</span></li>
                     <ul class="collapse show" id="sub-anno">
-                        <li class="nav-sub-menu" onclick="changeIframe('./announce.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./common/announce.html')"><i
                                 class="bi bi-card-list"></i>
                             通知列表
                         </li>
@@ -64,7 +64,7 @@
                     <li class="nav-menu" class="" data-bs-toggle="collapse" data-bs-target="#sub-select"><i
                             class="bi bi-book"></i> <span>论文选题</span></li>
                     <ul class="collapse" id="sub-select">
-                        <li class="nav-sub-menu" onclick="changeIframe('./disserHall.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./common/disserHall.html')"><i
                                 class="bi bi-card-list"></i>
                             选题大厅
                         </li>
@@ -74,7 +74,7 @@
                         <span>资料归档</span></li>
                     <ul class="collapse" id="sub2">
 
-                        <li id="file-list" class="nav-sub-menu" onclick="changeIframe('./fileList.html')"><i
+                        <li id="file-list" class="nav-sub-menu" onclick="changeIframe('./common/fileList.html')"><i
                                 class="bi bi-card-list"></i>
                             资料列表
                         </li>
@@ -83,15 +83,15 @@
                             class="bi bi-person-square"></i>
                         <span>个人中心</span></li>
                     <ul class="collapse" id="sub1">
-                        <li id="myAspir" class="nav-sub-menu d-none" onclick="changeIframe('./aspiration.html')"><i
+                        <li id="myAspir" class="nav-sub-menu d-none" onclick="changeIframe('./student/aspiration.html')"><i
                                 class="bi bi-card-list"></i>
                             我的志愿
                         </li>
-                        <li class="nav-sub-menu" onclick="changeIframe('./userInfo.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./common/userInfo.html')"><i
                                 class="bi bi-card-list"></i>
                             个人信息
                         </li>
-                        <li class="nav-sub-menu" onclick="changeIframe('./updatePasswd.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./common/updatePasswd.html')"><i
                                 class="bi bi-card-list"></i>
                             修改密码
                         </li>
@@ -100,19 +100,19 @@
                             class="bi bi-grip-horizontal"></i>
                         <span>教师管理中心</span></li>
                     <ul class="collapse" id="sub5">
-                        <li class="nav-sub-menu disser-list" onclick="changeIframe('./myDisser.html')"><i
+                        <li class="nav-sub-menu disser-list" onclick="changeIframe('./teacher/myDisser.html')"><i
                                 class="bi bi-card-list"></i>
                             我的题目
                         </li>
-                        <li class="nav-sub-menu" onclick="changeIframe('./newDisser.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./teacher/newDisser.html')"><i
                                 class="bi bi-card-list"></i>
                             新增题目
                         </li>
-                        <li class="nav-sub-menu" onclick="changeIframe('./newAnnounce.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./teacher/newAnnounce.html')"><i
                                 class="bi bi-card-list"></i>
                             发布通知
                         </li>
-                        <li class="nav-sub-menu" onclick="changeIframe('./uploadFile.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./teacher/uploadFile.html')"><i
                                 class="bi bi-card-list"></i>
                             上传资料
                         </li>
@@ -121,15 +121,15 @@
                     <li id="admin-center" class="nav-menu d-none" data-bs-toggle="collapse" data-bs-target="#sub3"><i class="bi bi-people"></i>
                         <span>系统管理中心</span></li>
                     <ul class="collapse" id="sub3">
-                        <li class="nav-sub-menu" onclick="changeIframe('./userList.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./admin/userList.html')"><i
                                 class="bi bi-card-list"></i>
                             用户管理
                         </li>
-                        <li class="nav-sub-menu" onclick="changeIframe('./addTeacher.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./admin/addTeacher.html')"><i
                                 class="bi bi-card-list"></i>
                             添加教师
                         </li>
-                        <li class="nav-sub-menu" onclick="changeIframe('./addStudent.html')"><i
+                        <li class="nav-sub-menu" onclick="changeIframe('./admin/addStudent.html')"><i
                                 class="bi bi-card-list"></i>
                             添加学生
                         </li>
@@ -148,7 +148,7 @@
                 <span class="col-2" onclick="reloadIframe()"><i class="bi bi-arrow-counterclockwise"></i>刷新页面</span>
             </nav>
             <div class="row">
-                <iframe id="iframe" class=" col" src="./announce.html" frameborder="0" width="98%"
+                <iframe id="iframe" class=" col" src="./common/announce.html" frameborder="0" width="98%"
                         height="550px"></iframe>
             </div>
         </div>

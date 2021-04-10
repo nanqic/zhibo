@@ -94,17 +94,20 @@ function deleteUser(username) {
 
 // 重置用户
 function resetUser(username) {
-    if (confirm("确认重置账号为：" + username + " 的用户吗？")) {
-        axios.patch('/admin/reset/' + username)
-            .then(alert("重置成功！"))
-            .then(location.reload())
+    if(confirm("确认重置用户名为 "+username+" 的用户吗？")){
+        axios({
+            method: 'patch',
+            url: '/admin/reset/'+username
+        })
+            .then(resp=>{
+                if(resp.msg=='ok') alert('重置成功！')
+            })
     }
-
 }
 
-//
+// 禁用用户
 function disableUser(username) {
-    if (confirm("确认禁用号为：" + username + " 的用户吗？")) {
+    if (confirm("确认禁用户名为：" + username + " 的用户吗？")) {
         axios.patch('/admin/disable/' + username)
             .then(alert("禁用成功！"))
             .then(location.reload())
