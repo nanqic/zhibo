@@ -23,7 +23,7 @@ public class UserInfoServiceImpl implements IUserInofService {
     @Autowired
     StudentInfoMapper infoMapper;
     @Autowired
-    CounselorMapper counMapper;
+    CounselorMapper counselorMapper;
     @Autowired
     UserMapper userMapper;
     @Autowired
@@ -32,14 +32,9 @@ public class UserInfoServiceImpl implements IUserInofService {
     @Override
     public RespVO getStudentInfo() {
         int uid = getUid();
-        StudentInfoView info = infoMapper.getUserInfoViewById(uid);
+        StudentInfoView info = infoMapper.getStudentInfoViewById(uid);
         // 查询对应老师
-        int teacUid = counMapper.selectById(uid).getTeachUid();
-        // 查询老师名字
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.select("name").eq("uid", teacUid);
-        String teacherName = teacherInfoMapper.selectOne(wrapper).getName();
-
+        String teacherName = counselorMapper.getTeacherByStuUid(uid);
         // 查询详细信息
         UserInfoVO vo = new UserInfoVO();
         vo.setView(info);
@@ -55,24 +50,17 @@ public class UserInfoServiceImpl implements IUserInofService {
         QueryWrapper wrapper1 = new QueryWrapper();
         wrapper1.eq("teach_uid", uid);
         wrapper1.select("stu_uid");
-        List<Counselor> counselors = counMapper.selectList(wrapper1);
+        List<Counselor> counselors = counselorMapper.selectList(wrapper1);
 
         // 查询所有学生名字
-        QueryWrapper<StudentInfo> wrapper2 = new QueryWrapper<StudentInfo>();
-        wrapper2.select("name");
-        counselors.forEach(counselor -> wrapper2.eq("uid", counselor.getStuUid()).or());
-        List<StudentInfo> infos = infoMapper.selectList(wrapper2);
-        String[] stusName = new String[infos.size()];
-        for (int i = 0; i <= infos.size() - 1; i++) {
-            stusName[i] = infos.get(i).getName();
-        }
+        String[] stus = counselorMapper.getStusByTeachUid(uid);
 
         // 查询老师详细信息
         TeacherInfoView view = teacherInfoMapper.getTeacherInfoViewById(uid);
         UserInfoVO vo = new UserInfoVO();
         vo.setView(view);
         // 被指导的学生列表
-        vo.setCounselor(stusName);
+        vo.setCounselor(stus);
         return RespVO.ok("查询成功！", vo);
     }
 

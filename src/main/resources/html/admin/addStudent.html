@@ -37,7 +37,7 @@
                 <option value="1">计算机科学与技术</option>
                 <option value="2">软件工程</option>
                 <option value="3">计算机网络</option>
-                <option value="3">计算机应用</option>
+                <option value="4">计算机应用</option>
             </select>
         </div>
         <div class="input-group mb-3">
@@ -48,7 +48,14 @@
         </div>
         <div class="input-group mb-3">
             <label for="class-name" class="form-label">班级：</label>
-            <input id="class-name" type="text" class="form-control" placeholder="请输入学生班级" required>
+            <label for="major" class="form-label">指导专业：</label>
+            <select class="form-select" id="class-name">
+                <option selected>请选择学生班级...</option>
+                <option value="1">计科211</option>
+                <option value="2">软工212</option>
+                <option value="3">计网213</option>
+                <option value="4">计应214</option>
+            </select>
         </div>
         <div class="input-group mb-3">
             <label for="graduation" class="form-label">毕业年份：</label>
@@ -83,7 +90,7 @@
                         phone: document.getElementById('phone').value,
                         deptId: document.getElementById('dept').value,
                         majorId: document.getElementById('major').value,
-                        className: document.getElementById('class-name').value,
+                        classId: document.getElementById('class-name').value,
                         graduation: document.getElementById('graduation').value,
                     }
                 }

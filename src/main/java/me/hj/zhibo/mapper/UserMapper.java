@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserMapper extends BaseMapper<User> {
-    @Select("select u.uid, u.username,u.password, i.name from tb_user u, v_user_info i where u.uid=i.uid and u.username==#{username}")
+    @Select("select uid, username,password, name from v_user_info WHERE username=#{username}")
     UserRegisterVO getUserRegister(String username);
 
     // 只查询老师和学生用户
