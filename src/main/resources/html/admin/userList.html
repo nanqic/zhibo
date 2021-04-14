@@ -10,6 +10,12 @@
 
 <body>
 <div class="container">
+    <!--        搜索用户-->
+    <i class="bi bi-search"></i>
+    <div class="col-4 d-inline-block">
+        <input type="text" class="form-control" id="username">
+    </div>
+    <button class="btn btn-success col-2" onclick="search()">搜索用户</button>
     <table class="table">
         <thead>
         <tr>
@@ -22,7 +28,7 @@
         </thead>
         <tbody class="tbody"></tbody>
     </table>
-    <nav aria-label="page navigation">
+    <nav id="nav" class="d-flex justify-content-center" aria-label="page navigation">
         <ul class="pagination justify-content-center fixed-bottom" id="page-list">
             <li class="page-item disabled" id="prev-page">
                 <a class="page-link">
@@ -35,7 +41,6 @@
                 </a>
             </li>
         </ul>
-        <span id="totalPage"></span>
     </nav>
 </div>
 <script src="/js/axios.min.js"></script>

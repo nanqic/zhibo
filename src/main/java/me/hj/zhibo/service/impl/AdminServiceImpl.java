@@ -37,6 +37,14 @@ public class AdminServiceImpl implements IAdminService {
     }
 
     @Override
+    public RespVO searchUser(int index, int size, String username) {
+        username = "%"+username+"%";
+        Page<UserListVO> page = new Page<>(index, size);
+        IPage<UserListVO> resPage = userMapper.searchUser(page, username);
+        return RespVO.ok("ok", resPage);
+    }
+
+    @Override
     public RespVO resetUser(String username) {
         userMapper.resetUser(username);
         return RespVO.ok("ok");

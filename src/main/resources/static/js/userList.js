@@ -8,13 +8,13 @@ function create(username, name, role, enabled) {
     let btnSetEnable = document.createElement('button')
 
     statusText.style.marginRight = '20px'
-    if(enabled==0){
+    if (enabled == 0) {
         statusText.className = 'text text-danger'
         btnSetEnable.className = 'btn btn-primary'
         statusText.innerHTML = '禁用'
         btnSetEnable.innerHTML = '启用'
         btnSetEnable.onclick = () => enableUser(username)
-    }else{
+    } else {
         statusText.className = 'text text-success'
         btnSetEnable.className = 'btn btn-warning'
         statusText.innerHTML = '正常'
@@ -45,42 +45,100 @@ function create(username, name, role, enabled) {
     tbody.appendChild(tr)
 }
 
+// 搜索用户
+let i = 1
+let total =1
+function search() {
+    const username = document.querySelector('#username').value
+    if(username!=null && username!='')
+    doSearch( username)
+}
+
+function doSearch(username) {
+    axios('/admin/search/' + i + '/10?username=' + username)
+        .then(resp => {
+            const data = resp.data.data
+            total = data.pages
+            renderData(data, 1)
+        }).then(() => {
+        let nav = document.querySelector('#nav')
+        let pageList = document.querySelector('#page-list')
+        if (pageList!=undefined)nav.removeChild(pageList)
+
+        if (i==1&&i<total){
+            let a = document.createElement('a')
+            a.className = 'page-link'
+            a.innerHTML = '下一页'
+            a.onclick=()=>loadMore()
+            nav.appendChild(a)
+        }else {
+            let a = document.querySelector('.page-link')
+            a.innerHTML = '已经是最后一页'
+            a.onclick = ()=>false
+        }
+
+
+    })
+}
+
+function loadMore() {
+    if(i<total){
+        i++
+    }else {
+        alert()
+    }
+    search()
+}
+
 // 加载数据
 function loadData(i = 1, bool = false) {
     axios.get('/admin/users/' + i + '/7')
         .then(resp => {
             let data = resp.data.data
-            let table = document.querySelector('.table')
-            let tbody = document.querySelector('.tbody')
-
-            if (tbody != undefined) {
-                table.removeChild(tbody)
+            renderData(data, i, bool)
+            if (i == 1) {
+                createPages(data, true)
+            } else {
+                createPages(data, false)
             }
-            let body = document.createElement('tbody')
-            body.className = 'tbody'
-            table.appendChild(body)
-            data.records.forEach(col => {
-                create(col.username, col.name, col.roleName,col.enabled)
-            })
-            // 初始化翻页下标
-            if (bool) {
-                for (let p = 1; p <= data.pages; p++) {
-                    initPageList(p)
-                    const pageList = document.querySelector("#page-list")
-                    pageList.children[1].className = "page-item active"
-                }
-            }
-            // 监听上下翻页
-            currentPage = data.current;
-            totalPage = data.pages;
-
-            const prevPage = document.getElementById('prev-page')
-            const nextPage = document.getElementById('next-page')
-            currentPage == 1 ? prevPage.className = ('page-item disabled') : prevPage.className = ('page-item')
-            currentPage == totalPage ? nextPage.classList.add('disabled') : nextPage.className = ('page-item')
-            nextPage.onclick = () => toNextPage(currentPage, totalPage)
-            prevPage.onclick = () => toPrevPage(currentPage)
         })
+}
+
+// 渲染数据
+function renderData(data, i = 1, bool) {
+    let table = document.querySelector('.table')
+    let tbody = document.querySelector('.tbody')
+
+    if (tbody != undefined) {
+        table.removeChild(tbody)
+    }
+    let body = document.createElement('tbody')
+    body.className = 'tbody'
+    table.appendChild(body)
+    data.records.forEach(col => {
+        create(col.username, col.name, col.roleName, col.enabled)
+    })
+}
+
+function createPages(data, bool = false) {
+    // 初始化翻页下标
+    if (bool) {
+        for (let p = 1; p <= data.pages; p++) {
+            initPageList(p)
+            const pageList = document.querySelector("#page-list")
+            pageList.children[1].className = "page-item active"
+        }
+    }
+    // 监听上下翻页
+    currentPage = data.current;
+    totalPage = data.pages;
+
+    const prevPage = document.getElementById('prev-page')
+    const nextPage = document.getElementById('next-page')
+    currentPage == 1 ? prevPage.className = ('page-item disabled') : prevPage.className = ('page-item')
+    currentPage == totalPage ? nextPage.classList.add('disabled') : nextPage.className = ('page-item')
+    nextPage.onclick = () => toNextPage(currentPage, totalPage)
+    prevPage.onclick = () => toPrevPage(currentPage)
 }
 
 // 删除用户
@@ -94,13 +152,13 @@ function deleteUser(username) {
 
 // 重置用户
 function resetUser(username) {
-    if(confirm("确认重置用户名为 "+username+" 的用户吗？")){
+    if (confirm("确认重置用户名为 " + username + " 的用户吗？")) {
         axios({
             method: 'patch',
-            url: '/admin/reset/'+username
+            url: '/admin/reset/' + username
         })
-            .then(resp=>{
-                if(resp.msg=='ok') alert('重置成功！')
+            .then(resp => {
+                if (resp.msg == 'ok') alert('重置成功！')
             })
     }
 }

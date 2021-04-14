@@ -11,7 +11,7 @@
  Target Server Version : 80023
  File Encoding         : 65001
 
- Date: 09/04/2021 15:42:29
+ Date: 14/04/2021 14:37:40
 */
 
 SET NAMES utf8mb4;
@@ -69,7 +69,7 @@ CREATE TABLE `tb_counselor` (
   `stu_uid` int DEFAULT NULL,
   `teach_uid` int DEFAULT NULL,
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_counselor
@@ -115,6 +115,9 @@ INSERT INTO `tb_counselor` VALUES (37, 37, 44);
 INSERT INTO `tb_counselor` VALUES (38, 38, 44);
 INSERT INTO `tb_counselor` VALUES (39, 39, 44);
 INSERT INTO `tb_counselor` VALUES (40, 40, 44);
+INSERT INTO `tb_counselor` VALUES (43, 64, 44);
+INSERT INTO `tb_counselor` VALUES (44, 65, 63);
+INSERT INTO `tb_counselor` VALUES (45, 66, 63);
 COMMIT;
 
 -- ----------------------------
@@ -149,9 +152,10 @@ CREATE TABLE `tb_disser_stu` (
 -- Records of tb_disser_stu
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_disser_stu` VALUES (6, 2);
 INSERT INTO `tb_disser_stu` VALUES (7, 3);
 INSERT INTO `tb_disser_stu` VALUES (11, 43);
+INSERT INTO `tb_disser_stu` VALUES (12, 2);
+INSERT INTO `tb_disser_stu` VALUES (14, 64);
 COMMIT;
 
 -- ----------------------------
@@ -165,7 +169,7 @@ CREATE TABLE `tb_dissertation` (
   `uid` int NOT NULL COMMENT '出题老师uid',
   `status` tinyint(1) DEFAULT '0' COMMENT '-0 进行中 -1 已完成',
   PRIMARY KEY (`did`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_dissertation
@@ -173,14 +177,14 @@ CREATE TABLE `tb_dissertation` (
 BEGIN;
 INSERT INTO `tb_dissertation` VALUES (2, 'test2', '2021/04/01/85004ce9-6cbf-4e9a-bf91-1dd3c2192285.pdf', 42, 1);
 INSERT INTO `tb_dissertation` VALUES (5, '李老师2', '2021/04/02/21bdc044-c90a-468c-9c85-3b1ea1176a19.pdf', 42, 1);
-INSERT INTO `tb_dissertation` VALUES (6, 'z2', '2021/04/02/a9975ec1-2197-4566-9635-13be9ed5f54a.pdf', 41, 1);
+INSERT INTO `tb_dissertation` VALUES (6, 'z2', '2021/04/02/a9975ec1-2197-4566-9635-13be9ed5f54a.pdf', 41, 0);
 INSERT INTO `tb_dissertation` VALUES (7, 'ztest', '2021/04/06/be33f639-713a-4fa8-8f30-ab65356761ae.pdf', 41, 1);
 INSERT INTO `tb_dissertation` VALUES (8, 'wq12', '2021/04/06/1fc4e8a8-fe34-4fb4-90a9-a2885cb804fc.pdf', 43, 1);
 INSERT INTO `tb_dissertation` VALUES (9, '新论文', '2021/04/08/788a7a78-f6ed-491c-bc05-1753d6d66653.pdf', 43, 0);
 INSERT INTO `tb_dissertation` VALUES (10, '5212', '2021/04/09/14320bba-18c2-40e3-8529-8d4e0e72ea4f.pdf', 43, 0);
-INSERT INTO `tb_dissertation` VALUES (11, 'tesett', '2021/04/09/eb211fb4-52a1-4a5d-b563-d2753a3e897b.pdf', 43, 1);
-INSERT INTO `tb_dissertation` VALUES (12, 'yyte', '2021/04/09/2308c136-a8db-443a-8710-4f26c8c9efb3.pdf', 41, 0);
+INSERT INTO `tb_dissertation` VALUES (12, 'yyte', '2021/04/09/2308c136-a8db-443a-8710-4f26c8c9efb3.pdf', 41, 1);
 INSERT INTO `tb_dissertation` VALUES (13, 'sdff', '2021/04/09/d466edcf-acc4-4c32-a305-b3f23131cfc4.pdf', 41, 0);
+INSERT INTO `tb_dissertation` VALUES (14, '吴老师的题', '2021/04/14/24585407-ddc7-4d21-b007-764c2fa8a291.pdf', 63, 1);
 COMMIT;
 
 -- ----------------------------
@@ -287,6 +291,9 @@ INSERT INTO `tb_student_info` VALUES (37, '董七秋', 2, 4, '15803716855', 4, 2
 INSERT INTO `tb_student_info` VALUES (38, '董八秋', 2, 4, '15803716855', 4, 2025);
 INSERT INTO `tb_student_info` VALUES (39, '董九秋', 2, 4, '15803716855', 4, 2025);
 INSERT INTO `tb_student_info` VALUES (40, '董十秋', 2, 4, '15803716855', 4, 2025);
+INSERT INTO `tb_student_info` VALUES (64, '张同学', 1, 1, '13522221111', 1, 2021);
+INSERT INTO `tb_student_info` VALUES (65, '刘同学', 1, 4, '13335674565', 4, 2021);
+INSERT INTO `tb_student_info` VALUES (66, '刘同学二', 1, 3, '13555552555', 4, 2021);
 COMMIT;
 
 -- ----------------------------
@@ -312,6 +319,8 @@ INSERT INTO `tb_teacher_info` VALUES (41, '张明远', 1, 1, '13566668888', '副
 INSERT INTO `tb_teacher_info` VALUES (42, '李文平', 2, 2, '13566668888', '副教授', '硕士');
 INSERT INTO `tb_teacher_info` VALUES (43, '王一', 1, 3, '13566668888', '讲师', '硕士');
 INSERT INTO `tb_teacher_info` VALUES (44, '赵明德', 2, 4, '13566668888', '教授', '博士');
+INSERT INTO `tb_teacher_info` VALUES (63, '吴老师', 1, 1, '13502220111', '教授', '博士');
+INSERT INTO `tb_teacher_info` VALUES (67, '吴老师题', 1, 2, '135622233', '副教授', '硕士');
 COMMIT;
 
 -- ----------------------------
@@ -326,7 +335,7 @@ CREATE TABLE `tb_user` (
   `enabled` bigint NOT NULL DEFAULT '1' COMMENT '用户状态，0-被禁用，1-正常， 4-软删除',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `account` (`username`) USING BTREE COMMENT '给账户添加唯一索引'
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_user
@@ -334,8 +343,8 @@ CREATE TABLE `tb_user` (
 BEGIN;
 INSERT INTO `tb_user` VALUES (1, '202101014101', '$2a$10$fGkICzEHFtClVXrF16ysz.GdvlLaGEl0Zyj4ekUGQiLvzMpOnJ0ku', 2, 1);
 INSERT INTO `tb_user` VALUES (2, '202101014102', '$2a$10$vqD2./0uWbmPNcZhhqWJseg4ZVmLNg44uVQx8u5qtczLC4nV3a7oS', 2, 1);
-INSERT INTO `tb_user` VALUES (3, '202101014103', '$2a$10$7IfNxv84yXs1BWBAgvOQ/OoZ85WBmNeRhsfy1.Q9Ku36rYJtio7BG', 2, 1);
-INSERT INTO `tb_user` VALUES (4, '202101014104', '', 2, 1);
+INSERT INTO `tb_user` VALUES (3, '202101014103', '', 2, 1);
+INSERT INTO `tb_user` VALUES (4, '202101014104', '', 2, 4);
 INSERT INTO `tb_user` VALUES (5, '202101014105', '', 2, 1);
 INSERT INTO `tb_user` VALUES (6, '202101014106', NULL, 2, 1);
 INSERT INTO `tb_user` VALUES (7, '202101014107', NULL, 2, 1);
@@ -374,9 +383,14 @@ INSERT INTO `tb_user` VALUES (39, '202101044109', NULL, 2, 1);
 INSERT INTO `tb_user` VALUES (40, '202101044110', NULL, 2, 1);
 INSERT INTO `tb_user` VALUES (41, '15010155', '$2a$10$1ICwDC6qhiSlUKDoWowWjuEfMSON0ehk0B7h7DMpjTa2lJQRPl8gS', 1, 1);
 INSERT INTO `tb_user` VALUES (42, '16010166', '$2a$10$3cSJCUMIEau4QhC81oZvJuoBtlqlbIQpbQ.0QzqjRX7e3s8irNLx.', 1, 1);
-INSERT INTO `tb_user` VALUES (43, '17010177', '$2a$10$7Uc757sdI/TmH1YHFGL93enyYCj0xHc2JnBs2GLofPdmeRqlZVfKq', 1, 1);
+INSERT INTO `tb_user` VALUES (43, '17010177', '$2a$10$5DkvR4S0S32nxrUPLER4euksyet32YOVnRdfy6aD1zUgxs4vhklr.', 1, 1);
 INSERT INTO `tb_user` VALUES (44, '18010188', '$2a$10$iVHrV10WKJEtArrQw94t3uFaDWZCQ/JUMCkpeWhKa60kNB6K3gSi.', 1, 1);
 INSERT INTO `tb_user` VALUES (45, 'admin', '$2a$10$fGkICzEHFtClVXrF16ysz.GdvlLaGEl0Zyj4ekUGQiLvzMpOnJ0ku', 0, 1);
+INSERT INTO `tb_user` VALUES (63, '20100101', '$2a$10$fE0PEUrGqAPEnpvprsAV1eAVmEVm8f/JoTs3.a483I6TGPL7iLDl.', 1, 1);
+INSERT INTO `tb_user` VALUES (64, '202001012122', '$2a$10$eC3nz8R0coEtRz4PYqow2Oempr4da.XpJJTp/EjG2FUNKkz0Tdavm', 2, 1);
+INSERT INTO `tb_user` VALUES (65, '202001012010', '$2a$10$7y8b58ubJMDXkHSifk8NYuZMYjk2k2Nbkyd6N1JqaBdi2K8koCUNa', 2, 1);
+INSERT INTO `tb_user` VALUES (66, '202010101121', '', 2, 1);
+INSERT INTO `tb_user` VALUES (67, '20100021', '$2a$10$kme17X04Jzv3TD2wLDJtSeiaUfSMvxb4xMahvBv4fpl59eKQj6I9S', 1, 1);
 COMMIT;
 
 -- ----------------------------
@@ -415,6 +429,6 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_teacher_info` AS selec
 -- View structure for v_user_info
 -- ----------------------------
 DROP VIEW IF EXISTS `v_user_info`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_user_info` AS select `tb_student_info`.`uid` AS `uid`,`tb_student_info`.`name` AS `name` from `tb_student_info` union select `tb_teacher_info`.`uid` AS `uid`,`tb_teacher_info`.`name` AS `name` from `tb_teacher_info`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_user_info` AS select `tb_student_info`.`uid` AS `uid`,`tb_student_info`.`name` AS `name`,`tb_user`.`username` AS `username`,`tb_user`.`password` AS `password` from (`tb_student_info` join `tb_user` on((`tb_student_info`.`uid` = `tb_user`.`uid`))) union select `tb_teacher_info`.`uid` AS `uid`,`tb_teacher_info`.`name` AS `name`,`tb_user`.`username` AS `username`,`tb_user`.`password` AS `password` from (`tb_teacher_info` join `tb_user` on((`tb_teacher_info`.`uid` = `tb_user`.`uid`)));
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -19,6 +19,22 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select u.uid, u.username, u.enabled, r.role_name, i.name from (tb_user u left join tb_user_role r on u.role_id=r.role_id) left join v_user_info i on u.uid=i.uid WHERE enabled<>4 and u.role_id BETWEEN 1 and 2")
     IPage<UserListVO> getUserList(Page<UserListVO> page);
 
+    @Select("SELECT\n" +
+            "\tu.uid,\n" +
+            "\tu.username,\n" +
+            "\tu.enabled,\n" +
+            "\tr.role_name,\n" +
+            "\ti.NAME \n" +
+            "FROM\n" +
+            "\t( tb_user u LEFT JOIN tb_user_role r ON u.role_id = r.role_id )\n" +
+            "\tLEFT JOIN v_user_info i ON u.uid = i.uid \n" +
+            "WHERE\n" +
+            "\tu.username LIKE #{username} \n" +
+            "\tAND enabled <> 4 \n" +
+            "\tAND u.role_id BETWEEN 1 \n" +
+            "\tAND 2")
+    IPage<UserListVO> searchUser(Page<UserListVO> page,String username);
+
     // 登录时，查询正常用户
     @Select("select u.uid, u.username, u.password, u.enabled, r.role_name from tb_user u left join tb_user_role r on u.role_id=r.role_id where u.enabled=1 and u.username=#{username}")
     UserLoginVO getUserLogin(String username);

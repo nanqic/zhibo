@@ -20,6 +20,10 @@ public class AdminController {
     RespVO userList(@PathVariable("index") int index, @PathVariable("size") int size) {
         return adminService.userList(index, size);
     }
+    @GetMapping("/search/{index}/{size}")
+    RespVO searchUser(@PathVariable("index") int index, @PathVariable("size") int size,@RequestParam String username) {
+        return adminService.searchUser(index, size, username);
+    }
 
     @PatchMapping("/reset/{username}")
     RespVO resetUser(@PathVariable String username) {
