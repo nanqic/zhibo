@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.hj.zhibo.entity.Announce;
 import me.hj.zhibo.mapper.AnnounceMapper;
+import me.hj.zhibo.mapper.CounselorMapper;
 import me.hj.zhibo.mapper.UserMapper;
 import me.hj.zhibo.service.IAnnounceService;
 import me.hj.zhibo.utils.UserUtil;
@@ -18,10 +19,13 @@ public class AnnounceServiceImpl implements IAnnounceService {
     AnnounceMapper mapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    CounselorMapper counselorMapper;
+
     @Override
     public RespVO getPage(int index, int size) {
         Page<AnnounceVO> page = new Page<>(index,size);
-        IPage<AnnounceVO> resPage = mapper.getList(page);
+        IPage<AnnounceVO> resPage = mapper.getListByUid(getUid(),page);
         return RespVO.ok("查询成功",resPage);
     }
 
@@ -37,6 +41,15 @@ public class AnnounceServiceImpl implements IAnnounceService {
 
         return RespVO.ok("发布成功！");
     }
+
+    @Override
+    public RespVO getPageByUid(int index,int size) {
+        int teachUid = counselorMapper.getTeachUidByStuUid(getUid());
+        Page<AnnounceVO> page = new Page<>(index,size);
+        IPage<AnnounceVO> resPage = mapper.getListByUid(teachUid,page);
+        return RespVO.ok("查询成功",resPage);
+    }
+
     private int getUid() {
         int uid = userMapper.getUid(UserUtil.getCurrentUser().getUsername());
         return uid;

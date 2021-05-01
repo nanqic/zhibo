@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.hj.zhibo.entity.Announce;
+import me.hj.zhibo.vo.AnnounceVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,9 +20,9 @@ class AnnounceMapperTest {
     @Test
     void test(){
 
-        IPage<Announce> iPage = new Page<>(1,2);
-        IPage<Announce> resPage = mapper.selectPage(iPage,null);
-        System.out.println(resPage);
+        Page<AnnounceVO> page = new Page<>(1,1);
+        IPage<AnnounceVO> iPage = mapper.getListByUid(41,page);
+        System.out.println(iPage);
     }
 
     @Test

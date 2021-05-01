@@ -24,4 +24,14 @@ public interface IDissertationService {
     RespVO abort(int did);
 
     RespVO search(String words);
+
+    RespVO submitAudit(MultipartFile file);
+
+    RespVO getStatus();
+
+    RespVO getAuditList(int index, int size);
+
+    RespVO reject(int did, int status, String advice);
+
+    RespVO pass(int did, int status);
 }

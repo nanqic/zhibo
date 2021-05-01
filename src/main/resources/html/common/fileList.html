@@ -43,7 +43,7 @@
         tr.children[1].appendChild(a)
         tr.children[2].innerHTML = up
         tr.children[1].className = 'text-info'
-        a.href = 'http://localhost/upload/' + path
+        a.href = 'http://localhost/upload/docs/' + path
         a.innerHTML = path
         tbody.appendChild(tr)
     }
@@ -57,7 +57,7 @@
                     let data = resp.data.data
                     totalPage = data.pages
                     data.records.forEach(col => {
-                        create(col.id, "docs/" + col.path, col.uploader)
+                        create(col.id, col.path, col.uploader)
                     })
                     let nav = document.querySelector('#nav')
                     let a = document.querySelector('.page-link')

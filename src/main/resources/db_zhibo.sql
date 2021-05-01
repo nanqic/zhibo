@@ -11,7 +11,7 @@
  Target Server Version : 80023
  File Encoding         : 65001
 
- Date: 14/04/2021 14:37:40
+ Date: 01/05/2021 10:13:16
 */
 
 SET NAMES utf8mb4;
@@ -28,7 +28,7 @@ CREATE TABLE `tb_announce` (
   `update_time` datetime DEFAULT NULL COMMENT '发布时间',
   `uid` int NOT NULL COMMENT '发布人',
   PRIMARY KEY (`aid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_announce
@@ -38,6 +38,8 @@ INSERT INTO `tb_announce` VALUES (1, 'test', 'eee', '2021-04-01 11:29:35', 41);
 INSERT INTO `tb_announce` VALUES (2, '最新通告！', '通知：1112312', '2021-04-02 15:17:10', 41);
 INSERT INTO `tb_announce` VALUES (3, 'z123', '555', '2021-04-06 09:44:11', 41);
 INSERT INTO `tb_announce` VALUES (4, '新标题', '新的内容', '2021-04-08 17:45:51', 43);
+INSERT INTO `tb_announce` VALUES (6, '新的通知', '通知内容，', '2021-04-14 15:13:45', 68);
+INSERT INTO `tb_announce` VALUES (7, '测试通知', '测试内容123', '2021-04-29 11:01:39', 43);
 COMMIT;
 
 -- ----------------------------
@@ -152,10 +154,10 @@ CREATE TABLE `tb_disser_stu` (
 -- Records of tb_disser_stu
 -- ----------------------------
 BEGIN;
+INSERT INTO `tb_disser_stu` VALUES (6, 64);
 INSERT INTO `tb_disser_stu` VALUES (7, 3);
 INSERT INTO `tb_disser_stu` VALUES (11, 43);
 INSERT INTO `tb_disser_stu` VALUES (12, 2);
-INSERT INTO `tb_disser_stu` VALUES (14, 64);
 COMMIT;
 
 -- ----------------------------
@@ -167,24 +169,32 @@ CREATE TABLE `tb_dissertation` (
   `name` varchar(64) NOT NULL COMMENT '论文题目',
   `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '论文路径',
   `uid` int NOT NULL COMMENT '出题老师uid',
-  `status` tinyint(1) DEFAULT '0' COMMENT '-0 进行中 -1 已完成',
+  `status` tinyint(1) DEFAULT '0' COMMENT '-0 选题进行中 -1 已完成选题\n *     -2 初审中 -3 初审退回 -4 初审通过\n *     -5 中期鉴定中 -6 中期鉴定退回  -7 中期鉴定通过\n *     -8 最终审核中 -9 最终审核退回 -10 最终审核通过-0 选题进行中 -1 已完成选题\n *     -2 初审中 -3 初审退回 -4 初审通过\n *     -5 中期鉴定中 -6 中期鉴定退回  -7 中期鉴定通过\n *     -8 最终审核中 -9 最终审核退回 -10 最终审核通过',
+  `audit_path` varchar(255) DEFAULT NULL COMMENT '提交的审核文档路径',
+  `advice` varchar(255) DEFAULT NULL COMMENT '教师意见',
   PRIMARY KEY (`did`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_dissertation
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_dissertation` VALUES (2, 'test2', '2021/04/01/85004ce9-6cbf-4e9a-bf91-1dd3c2192285.pdf', 42, 1);
-INSERT INTO `tb_dissertation` VALUES (5, '李老师2', '2021/04/02/21bdc044-c90a-468c-9c85-3b1ea1176a19.pdf', 42, 1);
-INSERT INTO `tb_dissertation` VALUES (6, 'z2', '2021/04/02/a9975ec1-2197-4566-9635-13be9ed5f54a.pdf', 41, 0);
-INSERT INTO `tb_dissertation` VALUES (7, 'ztest', '2021/04/06/be33f639-713a-4fa8-8f30-ab65356761ae.pdf', 41, 1);
-INSERT INTO `tb_dissertation` VALUES (8, 'wq12', '2021/04/06/1fc4e8a8-fe34-4fb4-90a9-a2885cb804fc.pdf', 43, 1);
-INSERT INTO `tb_dissertation` VALUES (9, '新论文', '2021/04/08/788a7a78-f6ed-491c-bc05-1753d6d66653.pdf', 43, 0);
-INSERT INTO `tb_dissertation` VALUES (10, '5212', '2021/04/09/14320bba-18c2-40e3-8529-8d4e0e72ea4f.pdf', 43, 0);
-INSERT INTO `tb_dissertation` VALUES (12, 'yyte', '2021/04/09/2308c136-a8db-443a-8710-4f26c8c9efb3.pdf', 41, 1);
-INSERT INTO `tb_dissertation` VALUES (13, 'sdff', '2021/04/09/d466edcf-acc4-4c32-a305-b3f23131cfc4.pdf', 41, 0);
-INSERT INTO `tb_dissertation` VALUES (14, '吴老师的题', '2021/04/14/24585407-ddc7-4d21-b007-764c2fa8a291.pdf', 63, 1);
+INSERT INTO `tb_dissertation` VALUES (2, 'test2', '2021/04/01/85004ce9-6cbf-4e9a-bf91-1dd3c2192285.pdf', 42, 1, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (5, '李老师2', '2021/04/02/21bdc044-c90a-468c-9c85-3b1ea1176a19.pdf', 42, 1, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (6, 'z2', '2021/04/02/a9975ec1-2197-4566-9635-13be9ed5f54a.pdf', 41, 1, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (7, 'ztest', '2021/04/06/be33f639-713a-4fa8-8f30-ab65356761ae.pdf', 41, 1, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (8, 'wq12', '2021/04/06/1fc4e8a8-fe34-4fb4-90a9-a2885cb804fc.pdf', 43, 1, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (9, '新论文', '2021/04/08/788a7a78-f6ed-491c-bc05-1753d6d66653.pdf', 43, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (10, '5212', '2021/04/09/14320bba-18c2-40e3-8529-8d4e0e72ea4f.pdf', 43, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (12, 'yyte', '2021/04/09/2308c136-a8db-443a-8710-4f26c8c9efb3.pdf', 41, 6, '2021/05/01/375a9fb7-872f-45be-9a84-3afc55b75253.pdf', '');
+INSERT INTO `tb_dissertation` VALUES (13, 'sdff', '2021/04/09/d466edcf-acc4-4c32-a305-b3f23131cfc4.pdf', 41, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (14, '吴老师的题', '2021/04/14/24585407-ddc7-4d21-b007-764c2fa8a291.pdf', 63, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (15, '李老师的选题', '2021/04/14/3827ea76-c1fd-4ccb-9f2b-497e394a236d.pdf', 68, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (16, '1234', '2021/04/29/2fa2bf68-6b9d-4e71-a9b3-91ad121a7f33.pdf', 43, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (17, '111', '2021/04/29/40fcb091-1f5b-430c-ad37-5945078f5f20.pdf', 43, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (18, '34', '2021/04/29/b0487708-4cf1-46da-b0cf-7425aff8fb44.pdf', 43, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (19, '1434', '2021/04/29/95e09cce-efd7-4f12-a84d-84dab2454da7.pdf', 43, 0, NULL, NULL);
+INSERT INTO `tb_dissertation` VALUES (20, '66', '2021/04/29/8f1c8189-a477-4e07-920b-e98e940d27e6.pdf', 43, 0, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -196,7 +206,7 @@ CREATE TABLE `tb_file` (
   `uid` int DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_file
@@ -209,6 +219,7 @@ INSERT INTO `tb_file` VALUES (4, 41, 'Java面试基础-1617673465027.pdf');
 INSERT INTO `tb_file` VALUES (5, 43, 'Java面试基础-1617673965691.pdf');
 INSERT INTO `tb_file` VALUES (6, 43, 'Java面试基础-1617951067958.pdf');
 INSERT INTO `tb_file` VALUES (7, 41, 'Java面试基础-1617952144153.pdf');
+INSERT INTO `tb_file` VALUES (8, 68, 'Spring面试38道题-1618384462474.pdf');
 COMMIT;
 
 -- ----------------------------
@@ -321,6 +332,7 @@ INSERT INTO `tb_teacher_info` VALUES (43, '王一', 1, 3, '13566668888', '讲师
 INSERT INTO `tb_teacher_info` VALUES (44, '赵明德', 2, 4, '13566668888', '教授', '博士');
 INSERT INTO `tb_teacher_info` VALUES (63, '吴老师', 1, 1, '13502220111', '教授', '博士');
 INSERT INTO `tb_teacher_info` VALUES (67, '吴老师题', 1, 2, '135622233', '副教授', '硕士');
+INSERT INTO `tb_teacher_info` VALUES (68, '李老师', 2, 2, '13255552222', '副教授', '硕士');
 COMMIT;
 
 -- ----------------------------
@@ -335,7 +347,7 @@ CREATE TABLE `tb_user` (
   `enabled` bigint NOT NULL DEFAULT '1' COMMENT '用户状态，0-被禁用，1-正常， 4-软删除',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `account` (`username`) USING BTREE COMMENT '给账户添加唯一索引'
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_user
@@ -375,7 +387,7 @@ INSERT INTO `tb_user` VALUES (31, '202101044101', '', 2, 1);
 INSERT INTO `tb_user` VALUES (32, '202101044102', NULL, 2, 1);
 INSERT INTO `tb_user` VALUES (33, '202101044103', NULL, 2, 1);
 INSERT INTO `tb_user` VALUES (34, '202101044104', NULL, 2, 1);
-INSERT INTO `tb_user` VALUES (35, '202101044105', NULL, 2, 1);
+INSERT INTO `tb_user` VALUES (35, '202101044105', '', 2, 1);
 INSERT INTO `tb_user` VALUES (36, '202101044106', NULL, 2, 1);
 INSERT INTO `tb_user` VALUES (37, '202101044107', NULL, 2, 1);
 INSERT INTO `tb_user` VALUES (38, '202101044108', NULL, 2, 1);
@@ -386,11 +398,12 @@ INSERT INTO `tb_user` VALUES (42, '16010166', '$2a$10$3cSJCUMIEau4QhC81oZvJuoBtl
 INSERT INTO `tb_user` VALUES (43, '17010177', '$2a$10$5DkvR4S0S32nxrUPLER4euksyet32YOVnRdfy6aD1zUgxs4vhklr.', 1, 1);
 INSERT INTO `tb_user` VALUES (44, '18010188', '$2a$10$iVHrV10WKJEtArrQw94t3uFaDWZCQ/JUMCkpeWhKa60kNB6K3gSi.', 1, 1);
 INSERT INTO `tb_user` VALUES (45, 'admin', '$2a$10$fGkICzEHFtClVXrF16ysz.GdvlLaGEl0Zyj4ekUGQiLvzMpOnJ0ku', 0, 1);
-INSERT INTO `tb_user` VALUES (63, '20100101', '$2a$10$fE0PEUrGqAPEnpvprsAV1eAVmEVm8f/JoTs3.a483I6TGPL7iLDl.', 1, 1);
-INSERT INTO `tb_user` VALUES (64, '202001012122', '$2a$10$eC3nz8R0coEtRz4PYqow2Oempr4da.XpJJTp/EjG2FUNKkz0Tdavm', 2, 1);
-INSERT INTO `tb_user` VALUES (65, '202001012010', '$2a$10$7y8b58ubJMDXkHSifk8NYuZMYjk2k2Nbkyd6N1JqaBdi2K8koCUNa', 2, 1);
+INSERT INTO `tb_user` VALUES (63, '20100101', '', 1, 1);
+INSERT INTO `tb_user` VALUES (64, '202001012122', '', 2, 1);
+INSERT INTO `tb_user` VALUES (65, '202001012010', '', 2, 1);
 INSERT INTO `tb_user` VALUES (66, '202010101121', '', 2, 1);
-INSERT INTO `tb_user` VALUES (67, '20100021', '$2a$10$kme17X04Jzv3TD2wLDJtSeiaUfSMvxb4xMahvBv4fpl59eKQj6I9S', 1, 1);
+INSERT INTO `tb_user` VALUES (67, '20100021', '', 1, 1);
+INSERT INTO `tb_user` VALUES (68, '20100011', '', 1, 1);
 COMMIT;
 
 -- ----------------------------

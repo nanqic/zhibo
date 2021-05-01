@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>审核列表</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css"/>
+</head>
+
+<body>
+<div class="container">
+    <h5 class="text-center text-warning">资料列表</h5>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">论文题目</th>
+            <th scope="col">审核进度</th>
+            <th class="" scope="col">操作</th>
+        </tr>
+        </thead>
+        <tbody class="tbody"></tbody>
+    </table>
+    <nav id="nav" class="d-none d-flex justify-content-center">
+        <a class="page-link" onclick="loadData()">加载更多...</a>
+    </nav>
+</div>
+<script src="/js/axios.min.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.js"></script>
+<script type="module">
+    import statusList from '/js/statusList.js'
+    let i = 1;
+    let totalPage = 1
+    loadData()
+
+    function create(did, name, path, status) {
+        const tbody = document.querySelector('.tbody')
+        let tr = document.createElement('tr')
+        let td = document.createElement('td')
+        let a = document.createElement('a')
+        let btnReject = document.createElement('button')
+        let btnPass = document.createElement('button')
+        btnReject.className = 'btn btn-danger'
+        btnPass.className = 'btn btn-success'
+        btnReject.innerHTML = '退回'
+        btnPass.innerHTML = '通过'
+        btnReject.style.marginRight = '16px'
+        btnReject.onclick = () => {
+            let advice = prompt("请输入退回建议，最多255个字")
+            // console.log(advice)
+            let _url = '/teacher/reject?did=' + did + '&status=' + status
+            if (advice != null) _url += '&advice='+advice
+                axios.post(_url)
+                    .then(() => {
+                        alert("论文已退回")
+                        location.reload()
+                    })
+        }
+        btnPass.onclick = () => {
+            axios.post('/teacher/pass?did=' + did + '&status=' + status)
+                .then(() => {
+                    alert("论文已通过")
+                    location.reload()
+                })
+        }
+        for (let j = 1; j <= 3; j++) {
+            tr.appendChild(td.cloneNode(true))
+        }
+        tr.children[0].appendChild(a)
+        tr.children[1].innerHTML = statusList[status]
+        tr.children[1].className = 'text-info'
+        tr.children[2].appendChild(btnReject)
+        tr.children[2].appendChild(btnPass)
+        tr.children[2].className = 'd-none'
+        if (status == 2 || status == 5 || status == 8) tr.children[2].className = ''
+        a.href = 'http://localhost/upload/' + path
+        a.innerHTML = name
+        a.target = '_blank'
+        tbody.appendChild(tr)
+    }
+
+
+    function loadData() {
+        if (i >= 1 && i < totalPage) ++i
+        axios('/teacher/audits/' + i + "/5")
+            .then(resp => {
+                    let data = resp.data.data
+                    totalPage = data.pages
+                    data.records.forEach(col => {
+                        create(col.did, col.name, col.auditPath, col.status)
+                    })
+                    let nav = document.querySelector('#nav')
+                    let a = document.querySelector('.page-link')
+                    if (totalPage > 1) {
+                        nav.className = 'd-flex justify-content-center'
+                    }
+                    if (i == totalPage) {
+                        nav.removeChild(a)
+                        nav.innerHTML = '已加载全部'
+                    }
+                }
+            )
+    }
+
+</script>
+
+</body>
+
+</html>

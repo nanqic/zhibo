@@ -59,7 +59,14 @@ function initPageList(i) {
     }
 }
 function initData() {
-    axios.get("/anno/page/1/3")
+    let _url = "/teacher/anno/1/3"
+    const userInfo = sessionStorage.getItem('userInfo')
+    const cookieData = JSON.parse(decodeURI(userInfo))
+    if (cookieData.role == '学生'){
+        _url = "/stu/anno/1/3"
+    }
+
+    axios.get(_url)
         .then(resp => {
             data = resp.data.data
             if (data.pages<=1){

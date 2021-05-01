@@ -37,7 +37,6 @@ function init() {
     document.querySelector('#sys-time').innerHTML = date.toLocaleDateString(undefined, options)
 
     // 根据登录是存的cookie, 显示用户信息
-
     let user = document.querySelector('#user')
     let role = document.querySelector('#role')
     let graduation = document.querySelector('#graduation')
@@ -53,21 +52,33 @@ function init() {
     // 根据登录角色，显示相应模块
     if (userRole == '学生') {
         let myAspir = document.querySelector('#myAspir')
+        let auditList = document.querySelector('#audit-list')
+        auditList.className = 'd-none'
         graduation.innerHTML = data.graduation + '届'
         major.innerHTML = data.major + "  " + data.className + '班'
         myAspir.className = 'nav-sub-menu'
     }
     if (userRole == '教师') {
         let teacherCenter = document.querySelector('#teacher-center')
+        let progress = document.querySelector('#audit-progress')
+        progress.className = 'd-none'
         teacherCenter.className = 'nav-menu'
         graduation.innerHTML = data.jobTitle
         major.innerHTML = data.major + "  " + data.degree
     }
     if (userRole == '管理员') {
+        let auditCenter = document.querySelector('#audit-center')
         let adminCenter = document.querySelector('#admin-center')
         let userCenter = document.querySelector('#user-center')
+        let announceCenter = document.querySelector('#announce-center')
+        let iframe = document.querySelector('#iframe')
+        auditCenter.className = 'd-none'
         adminCenter.className = 'nav-menu'
         userCenter.className = 'd-none'
+        announceCenter.className = 'd-none'
+        announceCenter.nextElementSibling.className = 'collapse'
+        iframe.src = './admin/userList.html'
+        adminCenter.nextElementSibling.className = 'collapse show'
     }
     // 创建梳子导航
     crumbNav()

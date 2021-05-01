@@ -43,7 +43,13 @@
         axios.post("/teacher/disser", formData)
             .then(() => alert("上传成功！"))
             // 跳转到列表页
-            .then(() => location.replace('disserHall.html'))
+            .then(() => {
+                location.replace('/common/disserHall.html')
+                let navMenu = window.parent.document.getElementById('nav-menu')
+                navMenu.innerHTML = '选题大厅'
+                navMenu.nextElementSibling.innerHTML = '论文选题'
+            })
+
 
 
     }

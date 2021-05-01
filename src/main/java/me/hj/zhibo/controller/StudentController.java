@@ -1,14 +1,18 @@
 package me.hj.zhibo.controller;
 
+import me.hj.zhibo.service.IAnnounceService;
 import me.hj.zhibo.service.IDissertationService;
 import me.hj.zhibo.vo.RespVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class StudentController {
     @Autowired
     private IDissertationService dService;
+    @Autowired
+    private IAnnounceService announceService;
 
     @GetMapping("/search")
     RespVO search(@RequestParam String words){
@@ -32,9 +36,28 @@ public class StudentController {
     RespVO saveDisser(@RequestParam int did) {
         return dService.saveDisser(did);
     }
+
     //退选志愿
-    @GetMapping("/student/abort")
+    @PostMapping("/student/abort")
     RespVO abort(@RequestParam int did){
         return dService.abort(did);
     }
+
+    // 获取指导老师的通知
+    @GetMapping("/stu/anno/{index}/{size}")
+    RespVO page(@PathVariable("index") Integer index,@PathVariable("size") Integer size){
+        return announceService.getPageByUid(index,size);
+    }
+    // 查询审核结果
+    @GetMapping("/student/audit")
+    RespVO status(){
+        return dService.getStatus();
+    }
+
+    // 提交审核
+    @PostMapping("/student/audit")
+    RespVO submit(@RequestParam MultipartFile file){
+        return dService.submitAudit(file);
+    }
+
 }

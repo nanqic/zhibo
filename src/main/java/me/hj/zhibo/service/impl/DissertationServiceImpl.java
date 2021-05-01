@@ -9,6 +9,7 @@ import me.hj.zhibo.mapper.DissertationMapper;
 import me.hj.zhibo.mapper.UserMapper;
 import me.hj.zhibo.service.IDissertationService;
 import me.hj.zhibo.utils.UserUtil;
+import me.hj.zhibo.vo.DisserStatusVO;
 import me.hj.zhibo.vo.DissertationVO;
 import me.hj.zhibo.vo.RespVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,43 +55,83 @@ public class DissertationServiceImpl implements IDissertationService {
         return RespVO.ok("ok", vo);
     }
 
+    @Override
+    public RespVO getAuditList(int index, int size) {
+        Page<Dissertation> page = new Page<>(index, size);
+        IPage<Dissertation> iPage = mapper.getAuditList(getUid(), page);
+        return RespVO.ok("ok", iPage);
+    }
+
+    @Override
+    public RespVO reject(int did, int status, String advice) {
+        status++;
+        Dissertation dissertation = new Dissertation()
+                .setDid(did).setStatus(status).setAdvice(advice);
+        mapper.updateById(dissertation);
+        return RespVO.ok("ok");
+    }
+
+    @Override
+    public RespVO pass(int did, int status) {
+        status += 2;
+        Dissertation dissertation = new Dissertation()
+                .setDid(did).setStatus(status);
+        mapper.updateById(dissertation);
+        return RespVO.ok("ok");
+    }
+
+    @Override
+    public RespVO submitAudit(MultipartFile file) {
+        String dbPath = writeFile(file).getMsg();
+        int did = mapper.getDidByUid(getUid());
+        // 检测是否已提交过修改
+        Dissertation d = mapper.selectById(did);
+        String auditPath = d.getAuditPath();
+        // 如果文件路径不为空，先删除原文档
+        if (!auditPath.equals(null)) {
+            removeFile(auditPath);
+        }
+        Dissertation disser = new Dissertation();
+        disser.setAuditPath(dbPath)
+                .setDid(did);
+        // 根据审核状态提交
+        int status = d.getStatus();
+        switch (status) {
+            case 1: case 3:
+                disser.setStatus(2);
+                break;
+            case 4: case 6:
+                disser.setStatus(5);
+                break;
+            case 7: case 9:
+                disser.setStatus(8);
+                break;
+            default:
+                disser.setStatus(1);
+        }
+
+        mapper.updateById(disser);
+        return RespVO.ok("ok");
+    }
+
+
+    @Override
+    public RespVO getStatus() {
+        int did = mapper.getDidByUid(getUid());
+        DisserStatusVO vo = mapper.getStatusByDid(did);
+        return RespVO.ok("ok", vo);
+    }
+
     // 发布新的论文题目
     @Override
     public RespVO newDisser(MultipartFile file, String name) {
-        // 获取初始文件名
-        String oldName = file.getOriginalFilename();
-        // 限制文件大小为2M
-        if (file.isEmpty()) return RespVO.error("未选择文件！");
-        if (file.getSize() > 2 * 1024 * 1024) return RespVO.error("文件大小超过限制");
-        // 限定文件后缀
-        if (!oldName.endsWith(".pdf")) return RespVO.error("文件格式不支持");
-        // 以日期格式命名文件夹
-        LocalDate ld = LocalDate.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd/");
-        String format = dtf.format(ld);
-        File folder = new File(uploadPath + format);
-
-        // 创建文件夹
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-        // 创建uuid文件名
-        String newName = UUID.randomUUID().toString()
-                + oldName.substring(oldName.lastIndexOf("."));
-        String dbPath = format + newName;
-
-        try {
-            file.transferTo(new File(folder, newName));
-            // 讲文件路径存入数据库
-            Dissertation disser = new Dissertation()
-                    .setName(name)
-                    .setPath(dbPath)
-                    .setUid(userMapper.getUid(UserUtil.getCurrentUser().getUsername()));
-            mapper.insert(disser);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return RespVO.error("上传失败！");
-        }
+        String dbPath = writeFile(file).getMsg();
+        // 将文件路径存入数据库
+        Dissertation disser = new Dissertation()
+                .setName(name)
+                .setPath(dbPath)
+                .setUid(userMapper.getUid(UserUtil.getCurrentUser().getUsername()));
+        mapper.insert(disser);
         return RespVO.ok("ok");
     }
 
@@ -137,10 +178,7 @@ public class DissertationServiceImpl implements IDissertationService {
         // 删除数据索引
         mapper.deleteById(did);
 //        删除文件
-        File file = new File(uploadPath + path);
-        if (file.exists()) {
-            file.delete();
-        }
+        removeFile(path);
         return RespVO.ok("删除成功！");
     }
 
@@ -178,5 +216,43 @@ public class DissertationServiceImpl implements IDissertationService {
     private int getUid() {
         int uid = userMapper.getUid(UserUtil.getCurrentUser().getUsername());
         return uid;
+    }
+
+    private RespVO writeFile(MultipartFile file) {
+        // 获取初始文件名
+        String oldName = file.getOriginalFilename();
+        // 限制文件大小为2M
+        if (file.isEmpty()) return RespVO.error("未选择文件！");
+        if (file.getSize() > 2 * 1024 * 1024) return RespVO.error("文件大小超过限制");
+        // 限定文件后缀
+        if (!oldName.endsWith(".pdf")) return RespVO.error("文件格式不支持");
+        // 以日期格式命名文件夹
+        LocalDate ld = LocalDate.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd/");
+        String format = dtf.format(ld);
+        File folder = new File(uploadPath + format);
+
+        // 创建文件夹
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        // 创建uuid文件名
+        String newName = UUID.randomUUID().toString()
+                + oldName.substring(oldName.lastIndexOf("."));
+        String dbPath = format + newName;
+        try {
+            file.transferTo(new File(folder, newName));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return RespVO.error("上传失败！");
+        }
+        return RespVO.ok(dbPath);
+    }
+
+    private void removeFile(String path) {
+        File file = new File(uploadPath + path);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 }

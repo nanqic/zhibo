@@ -66,7 +66,7 @@
 
     function abort() {
         if (confirm("确认退选论文吗？")) {
-            axios('/student/abort?did=' + did)
+            axios.post('/student/abort?did=' + did)
                 .then(resp => {
                     if (resp.data.status == 200) {
                         alert("退选成功！")

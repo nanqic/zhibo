@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.hj.zhibo.entity.Dissertation;
+import me.hj.zhibo.vo.DisserStatusVO;
 import me.hj.zhibo.vo.DissertationVO;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -27,4 +28,12 @@ public interface DissertationMapper extends BaseMapper<Dissertation> {
     @Select("SELECT d.*,i.name as teacher FROM tb_dissertation d LEFT JOIN v_user_info i ON d.uid=i.uid WHERE d.name LIKE #{words}")
     IPage<DissertationVO> search(String words, Page<DissertationVO> page);
 
+    @Select("SELECT did FROM tb_disser_stu WHERE uid=#{uid}")
+    int getDidByUid(int uid);
+
+    @Select("select status, advice from tb_dissertation where did = #{did}")
+    DisserStatusVO getStatusByDid(int did);
+
+    @Select("SELECT did, name, audit_path, `status` FROM tb_dissertation WHERE uid=#{uid} and `status` > 1 ORDER BY `status`")
+    IPage<Dissertation> getAuditList(int uid, Page<Dissertation> page);
 }
