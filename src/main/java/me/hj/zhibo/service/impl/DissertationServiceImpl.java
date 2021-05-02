@@ -75,7 +75,7 @@ public class DissertationServiceImpl implements IDissertationService {
     public RespVO pass(int did, int status) {
         status += 2;
         Dissertation dissertation = new Dissertation()
-                .setDid(did).setStatus(status);
+                .setDid(did).setStatus(status).setAdvice("");
         mapper.updateById(dissertation);
         return RespVO.ok("ok");
     }
@@ -88,7 +88,7 @@ public class DissertationServiceImpl implements IDissertationService {
         Dissertation d = mapper.selectById(did);
         String auditPath = d.getAuditPath();
         // 如果文件路径不为空，先删除原文档
-        if (!auditPath.equals(null)) {
+        if (auditPath != null) {
             removeFile(auditPath);
         }
         Dissertation disser = new Dissertation();

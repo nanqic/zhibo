@@ -31,7 +31,6 @@
     import statusList from '/js/statusList.js'
     let i = 1;
     let totalPage = 1
-    loadData()
 
     function create(did, name, path, status) {
         const tbody = document.querySelector('.tbody')
@@ -79,8 +78,7 @@
         tbody.appendChild(tr)
     }
 
-
-    function loadData() {
+    window.loadData = function () {
         if (i >= 1 && i < totalPage) ++i
         axios('/teacher/audits/' + i + "/5")
             .then(resp => {
@@ -101,6 +99,8 @@
                 }
             )
     }
+    window.loadData()
+
 
 </script>
 
