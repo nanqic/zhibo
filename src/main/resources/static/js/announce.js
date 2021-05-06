@@ -1,5 +1,8 @@
+const userInfo = sessionStorage.getItem('userInfo')
+const cookieData = JSON.parse(decodeURI(userInfo))
 // 初始化页面数据
 initData()
+
 // 动态创建card
 function newCard(title, text,teacher, date) {
     //绑定父节点
@@ -60,8 +63,6 @@ function initPageList(i) {
 }
 function initData() {
     let _url = "/teacher/anno/1/3"
-    const userInfo = sessionStorage.getItem('userInfo')
-    const cookieData = JSON.parse(decodeURI(userInfo))
     if (cookieData.role == '学生'){
         _url = "/stu/anno/1/3"
     }
@@ -93,7 +94,11 @@ function initData() {
 }
 // 刷新卡片数据
 function refreshCard(i){
-    axios.get("/anno/page/" + i + "/3")
+    let _url = '/teacher/anno/'+i+'/3'
+    if (cookieData.role == '学生'){
+        _url = '/stu/anno/'+i+'/3'
+    }
+    axios.get(_url)
         .then(resp => {
             data = resp.data.data
             // 把新数据放到卡片

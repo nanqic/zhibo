@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>新通告</title>
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
 </head>
 <body>
 <div class="container">
@@ -26,6 +26,10 @@
     function newAnno() {
         let title = document.getElementById('title')
         let content = document.getElementById('content')
+        if(title.value.length == 0 || content.value.length == 0){
+            alert("标题或内容不能为空！")
+            return
+        }
         axios.post("/teacher/anno", {
             title: title.value,
             content: content.value
@@ -39,6 +43,6 @@
             })
     }
 </script>
-<script src="/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
