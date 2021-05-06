@@ -19,6 +19,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -182,13 +184,17 @@ public class DissertationServiceImpl implements IDissertationService {
         return RespVO.ok("删除成功！");
     }
 
-
+    @Transactional(rollbackFor = UnexpectedRollbackException.class)
     @Override
     public RespVO abort(int did) {
         int row = mapper.updateStatus(did);
+        if(row != 1) return RespVO.error("已提交过审核，不可退选！");
         int row2 = duMapper.deleteById(did);
-        if (row == 1 && row2 == 1) return RespVO.ok("ok");
-        return RespVO.error("error");
+        if (row2 != 1) {
+            throw new UnexpectedRollbackException("数据库异常！");
+        }
+        return RespVO.ok("ok");
+
     }
 
     @Override

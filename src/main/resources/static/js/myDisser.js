@@ -1,47 +1,53 @@
+import statusList from "./statusList.js";
+
 let i = 1;
 let totalPage = 1
-loadData()
 
 // 创建表格节点
-function create(did, name, path) {
+function create(did, name, status, path) {
     const tbody = document.querySelector('.tbody')
     let tr = document.createElement('tr')
     let td1 = document.createElement('td')
+    let td0 = document.createElement('td')
     let td2 = document.createElement('td')
     let td3 = document.createElement('td')
     let btn0 = document.createElement('button')
-    let btn = document.createElement('button')
-    let input = document.createElement('input')
-    input.type = 'hidden'
-    input.value = path
+    let a = document.createElement('a')
     btn0.className = 'btn btn-primary'
     btn0.innerHTML = '下载'
-    btn.className = 'btn btn-danger'
-    btn.innerHTML = '删除'
-    btn.style.marginLeft = '20px'
     td1.innerHTML = did
-    td2.innerHTML = name
+    a.innerHTML = name
+    a.href = '/upload/' + path
+    td0.innerHTML = statusList[status]
+    td0.className = 'text-info'
+    td2.appendChild(a)
     td3.appendChild(btn0)
-    td3.appendChild(input)
-    td3.appendChild(btn)
+    if (status == 0) {
+        let btn = document.createElement('button')
+        btn.className = 'btn btn-danger'
+        btn.innerHTML = '删除'
+        btn.style.marginLeft = '20px'
+        td3.appendChild(btn)
+        // 监听删除按钮
+        btn.onclick = () => deleteDisser(did, path)
+    }
     tr.appendChild(td1)
     tr.appendChild(td2)
+    tr.appendChild(td0)
     tr.appendChild(td3)
     tbody.appendChild(tr)
     // 监听下载按钮
     btn0.onclick = () => download(name, path)
-    // 监听删除按钮
-    btn.onclick = () => deleteDisser(did, path)
 }
 
 // 获取数据
-function loadData() {
+window.loadData = function () {
     if (i >= 1 && i < totalPage) ++i
     axios.get('/teacher/' + i + '/3')
         .then(resp => {
             let data = resp.data.data
             data.records.forEach((col) => {
-                create(col.did, col.name, col.path)
+                create(col.did, col.name, col.status, col.path)
             })
             totalPage = data.pages
             const nav = document.querySelector('#nav')
@@ -56,6 +62,7 @@ function loadData() {
             }
         })
 }
+window.loadData()
 
 // 下载题目文档
 function download(name, path) {

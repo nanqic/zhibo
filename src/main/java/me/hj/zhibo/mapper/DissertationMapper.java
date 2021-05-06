@@ -22,7 +22,7 @@ public interface DissertationMapper extends BaseMapper<Dissertation> {
     @Select("SELECT d.*,i.name as teacher FROM (tb_dissertation d JOIN tb_disser_stu s ON d.did=s.did) LEFT JOIN tb_teacher_info i ON d.uid=i.uid WHERE s.uid=#{uid}")
     DissertationVO myAspiration(int uid);
 
-    @Update("update tb_dissertation SET `status`=0 WHERE did=#{did}")
+    @Update("update tb_dissertation SET `status`=0 WHERE did=#{did} and `status`=1")
     int updateStatus(int did);
 
     @Select("SELECT d.*,i.name as teacher FROM tb_dissertation d LEFT JOIN v_user_info i ON d.uid=i.uid WHERE d.name LIKE #{words}")

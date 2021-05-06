@@ -47,6 +47,10 @@
         btnReject.onclick = () => {
             let advice = prompt("请输入退回建议，最多255个字")
             // console.log(advice)
+            if(advice.length >255) {
+                alert("退回建议最多255个字符")
+                return
+            }
             let _url = '/teacher/reject?did=' + did + '&status=' + status
             if (advice != null) _url += '&advice='+advice
                 axios.post(_url)
